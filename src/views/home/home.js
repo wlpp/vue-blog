@@ -14,15 +14,15 @@ export default {
     };
   },
   computed: {
-    ...mapState("homeStore", ["articles", "tags", "tagNames", "pageTotal", "pageIndex", "information","loginPopup"]),
+    ...mapState("homeStore", ["archive", "tags", "tagNames", "pageTotal", "pageIndex", "blogger","loginPopup"]),
   },
   methods: {
     ...mapMutations("homeStore", [""]),
-    ...mapActions("homeStore", ["getArticles", "getTags", "handleTag", "handleSearch", "handlePage", "getInformation"]),
+    ...mapActions("homeStore", ["getArchive", "getTags", "handleTag", "handleSearch", "handlePage", "getBlogger"]),
   },
   mounted() {
     this.getTags();
-    this.getArticles();
-    this.getInformation();
+    this.getArchive();
+    this.getBlogger();
   },
 };

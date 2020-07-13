@@ -1,23 +1,26 @@
 const router = require("koa-router")();
-const articles = require("../models/articles");
+const archive = require("../models/archive");
 const tags = require("../models/tags");
-const information = require("../models/information");
+const blogger = require("../models/blogger");
 // const reader = require("../models/reader");
 
 // 文章列表
-router.get("/articles", async (ctx) => {
+router.get("/archive", async (ctx) => {
+  new archive({
+    title:'111'
+  })
   const tagNames = eval("/^.*" + ctx.query.tagNames + ".*$/");
   const title = eval("/^.*" + ctx.query.title + ".*$/");
   const pageIndex = ctx.query.pageIndex;
   const pageSize = ctx.query.pageSize;
   let pageTotal = 0;
   // 获取总数量
-  await articles.find({ tagNames, title }, (err, Data2) => {
+  await archive.find({ tagNames, title }, (err, Data2) => {
     if (!err) {
       pageTotal = Data2.length > pageSize ? Math.ceil(Data2.length / pageSize)  : 1;
     }
   });
-  await articles
+  await archive
     .find({ tagNames, title })
     .skip((pageIndex - 1) * pageSize)
     .limit(pageIndex * pageSize)
@@ -47,8 +50,8 @@ router.get("/tags", async (ctx) => {
   });
 });
 // 博主信息
-router.get("/information", async (ctx) => {
-  await information.find((err, Data) => {
+router.get("/blogger", async (ctx) => {
+  await blogger.find((err, Data) => {
     if (!err) {
       ctx.body = {
         Code: 200,

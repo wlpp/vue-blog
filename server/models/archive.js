@@ -1,15 +1,14 @@
 const mongoose = require("mongoose");
 
 // userSchema为表名称
-const detailsSchema = new mongoose.Schema(
+const archiveSchema = new mongoose.Schema(
   {
-    commentNum: String,
-    contents: String,
     id: Number,
+    title: String,
+    commentNum: String,
     likeNum: Number,
     readNum: Number,
     tagNames: String,
-    title: String,
   },
   {
     // 获取数据创建/更新时间
@@ -21,4 +20,4 @@ const detailsSchema = new mongoose.Schema(
 );
 
 // billSchema为表名称
-module.exports = mongoose.model("Details", detailsSchema);
+module.exports = mongoose.model("archive", archiveSchema, "archive");

@@ -6,7 +6,7 @@
           <b>当前检索条件:</b><span v-if="tagNames !== ''">{{ tagNames }}</span>
         </div>
         <div class="page-box">
-          <div class="page-item" v-for="(item, index) in articles" :key="index">
+          <div class="page-item" v-for="(item, index) in archive" :key="index">
             <div class="page-item--meta">
               <span v-for="(c_item, c_index) in item.tagNames" :key="c_index">{{ c_item }}</span>
             </div>
@@ -23,7 +23,7 @@
             </div>
           </div>
         </div>
-        <div class="page-count" v-if="articles.length > 0">
+        <div class="page-count" v-if="archive.length > 0">
           <span
             >共<b>{{ pageTotal }}</b
             >页</span
@@ -38,7 +38,7 @@
             下一页 <i class="iconfont iconright"></i
           ></span>
         </div>
-        <div class="page-null" v-if="articles.length === 0">
+        <div class="page-null" v-if="archive.length === 0">
           <i class="iconfont iconwushuju"></i>
           <span>暂无数据呦</span>
         </div>
@@ -57,7 +57,7 @@
           <i class="iconfont iconsearch" @click="handleSearch(value)"></i>
         </div>
         <!-- 个人信息 -->
-        <Ordme :information="information" />
+        <Ordme :blogger="blogger" />
         <!-- 标签 -->
         <div class="tags">
           <div class="tags-title">标签</div>

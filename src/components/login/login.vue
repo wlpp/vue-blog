@@ -16,7 +16,7 @@
           <div class="login-text">整个静鸡鸡的邮箱吧！</div>
         </div>
       </div>
-      <div class="login-button sure" @click="handleConfirm">确定</div>
+      <div class="login-button sure" @click="handleConfirm" @keyup.enter="handleConfirm">确定</div>
       <div class="login-button close" @click="setLoginPopup(1)">关闭</div>
     </div>
   </transition>
@@ -49,14 +49,14 @@ export default {
         return;
       }
       if (this.email === "") {
-        this.$message("邮箱不能为空"); 
+        this.$message("邮箱不能为空");
         return;
       }
       if (!reg.test(this.email)) {
         this.$message("邮箱格式不正确");
         return;
       }
-      this.updateRead()
+      this.updateRead();
     },
   },
 };

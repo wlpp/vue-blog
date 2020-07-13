@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
-// userSchema为表名称
-const informationSchema = new mongoose.Schema(
+const bloggerSchema = new mongoose.Schema(
   {
     name: String,
     like: Number,
@@ -17,5 +16,5 @@ const informationSchema = new mongoose.Schema(
   }
 );
 
-// informationSchema 为表名称
-module.exports = mongoose.model("Information", informationSchema);
+// blogger 为表名称
+module.exports = mongoose.model("blogger", bloggerSchema, "blogger");

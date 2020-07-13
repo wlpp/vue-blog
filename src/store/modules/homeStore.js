@@ -5,9 +5,9 @@ export default {
   namespaced: true, //添加后该模块的getters,mutations，actions将不再全局调用
   state: {
     num: 111,
-    articles: [],
+    archive: [],
     tags: [],
-    information: {},
+    blogger: {},
     title: "",
     tagNames: "",
     pageIndex: 1,
@@ -19,14 +19,14 @@ export default {
   getters: {},
   mutations: {
     // 初始文章数据
-    initArticles(state, arr) {
+    initArchive(state, arr) {
       arr = arr.map((item) => {
         return {
           ...item,
           tagNames: item.tagNames.split(","),
         };
       });
-      state.articles = arr;
+      state.archive = arr;
     },
     // 登录弹框
     setLoginPopup(state, type) {
@@ -42,7 +42,7 @@ export default {
   },
   actions: {
     // 文章列表
-    getArticles({ state, commit }) {
+    getArchive({ state, commit }) {
       const params = {
         title: state.title,
         tagNames: state.tagNames,
@@ -50,10 +50,10 @@ export default {
         pageSize: state.pageSize,
       };
       homeApi
-        .getArticles(params)
+        .getArchive(params)
         .then((res) => {
           if (res.data.Code === 200) {
-            commit("initArticles", res.data.Data);
+            commit("initArchive", res.data.Data);
             state.pageTotal = res.data.pageTotal;
           }
         })
@@ -75,13 +75,13 @@ export default {
         });
     },
     // 博主信息
-    getInformation({ state }) {
+    getBlogger({ state }) {
       state.isRead = localStorage.getItem("isRead");
       homeApi
-        .getInformation()
+        .getBlogger()
         .then((res) => {
           if (res.data.Code === 200) {
-            state.information = res.data.Data[0];
+            state.blogger = res.data.Data[0];
           }
         })
         .catch((err) => {
@@ -91,14 +91,14 @@ export default {
     // 点击标签
     handleTag({ state, dispatch }, name) {
       name !== state.tagNames ? (state.tagNames = name) : (state.tagNames = "");
-      dispatch("getArticles");
+      dispatch("getArchive");
     },
     // 点击搜索
     handleSearch({ state, dispatch }, value) {
       state.title = value;
       // state.pageIndex = 1;
 
-      dispatch("getArticles");
+      dispatch("getArchive");
     },
     // 点击翻页
     handlePage({ state, dispatch }, type) {
@@ -113,7 +113,7 @@ export default {
           state.pageIndex < state.pageTotal && state.pageIndex++;
           break;
       }
-      dispatch("getArticles");
+      dispatch("getArchive");
     },
     // 更新订阅
     updateRead({ state, dispatch }) {
@@ -125,7 +125,7 @@ export default {
             state.isRead = true;
             localStorage.setItem("isRead", true);
             Vue.prototype.$message(res.data.msg);
-            dispatch("getInformation");
+            dispatch("getBlogger");
           }
         })
         .catch((err) => {

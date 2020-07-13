@@ -3,18 +3,18 @@
     <div class="ordme-avator">
       <img draggable="false" :src="avator" alt="" />
     </div>
-    <p class="ordme-name">{{ information && information.name }}</p>
+    <p class="ordme-name">{{ (blogger && blogger.name) || "大派" }}</p>
     <div class="ordme-info">
       <p>
-        <span>{{ information && information.article }}</span
+        <span>{{ (blogger && blogger.article) || 0 }}</span
         ><i title="博文">博文</i>
       </p>
       <p>
-        <span>{{ information && information.like }}</span
+        <span>{{ (blogger && blogger.like) || 0 }}</span
         ><i title="喜欢">点赞</i>
       </p>
       <p>
-        <span>{{ information && information.read }}</span
+        <span>{{ (blogger && blogger.read) || 0 }}</span
         ><i title="订阅">订阅</i>
       </p>
     </div>
@@ -30,7 +30,7 @@ import config from "@/helpers/config";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   props: {
-    information: {
+    blogger: {
       type: Object,
       defalut: {},
     },

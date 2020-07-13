@@ -1,13 +1,13 @@
 import request from "./request";
 export default {
-  getArticles: async (params) => {
-    return request("get", "/articles", params);
+  getArchive: async (params) => {
+    return request("get", "/archive", params);
   },
   getTags: async () => {
     return request("get", "/tags");
   },
-  getInformation: async () => {
-    return request("get", "/information");
+  getBlogger: async () => {
+    return request("get", "/blogger");
   },
   updateRead: async () => {
     return request("post", "/updateRead");
