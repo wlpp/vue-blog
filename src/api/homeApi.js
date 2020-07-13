@@ -1,20 +1,18 @@
 import request from "./request";
 export default {
   getArticles: async (params) => {
-    return request(
-      `/articles?title=${params.title}&tagNames=${params.tagNames}&pageIndex=${params.pageIndex}&pageSize=${params.pageSize}`
-    );
+    return request("get", "/articles", params);
   },
   getTags: async () => {
-    return request("/tags");
+    return request("get", "/tags");
   },
   getInformation: async () => {
-    return request("/information");
+    return request("get", "/information");
   },
   updateRead: async () => {
-    return request("/updateRead", "post");
+    return request("post", "/updateRead");
   },
   addReader: async (params) => {
-    return request(`/addReader?name=${params.name}&email=${params.email}`, "post");
+    return request("post", "/addReader", params);
   },
 };

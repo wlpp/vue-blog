@@ -1,11 +1,15 @@
 const koa = require("koa");
 const mongoose = require("mongoose");
-const chalk = require("chalk");
+const bodyParser = require("koa-bodyparser");
 const session = require("koa-session");
+const chalk = require("chalk");
 
 const app = new koa();
-const home = require("./routes/home/home");
+const home = require("./routes/home");
+const article = require("./routes/article");
+app.use(bodyParser()); //必须先注册bodyParser再注册路由，否则会获取不到
 app.use(home.routes(), home.allowedMethods());
+app.use(article.routes(), article.allowedMethods());
 
 app.keys = ["WLPP"];
 
@@ -24,7 +28,7 @@ app.use(session(sessionConfig, app));
 // 允许跨域
 app.use(async (ctx, next) => {
   ctx.set("Access-Control-Allow-Origin", ctx.headers.origin); // 很奇怪的是，使用 * 会出现一些其他问题
-  ctx.set("Access-Control-Allow-Headers", "content-type");
+  ctx.set("Access-Control-Allow-Headers", "content-type:application/json");
   ctx.set("Access-Control-Allow-Methods", "OPTIONS,GET,HEAD,PUT,POST,DELETE,PATCH");
   await next();
 });

@@ -1,8 +1,8 @@
 const router = require("koa-router")();
-const articles = require("../../models/articles");
-const tags = require("../../models/tags");
-const information = require("../../models/information");
-const reader = require("../../models/reader");
+const articles = require("../models/articles");
+const tags = require("../models/tags");
+const information = require("../models/information");
+// const reader = require("../models/reader");
 
 // 文章列表
 router.get("/articles", async (ctx) => {
@@ -14,7 +14,7 @@ router.get("/articles", async (ctx) => {
   // 获取总数量
   await articles.find({ tagNames, title }, (err, Data2) => {
     if (!err) {
-      pageTotal = Data2.length > pageSize ? Data2.length / pageSize : 1;
+      pageTotal = Data2.length > pageSize ? Math.ceil(Data2.length / pageSize)  : 1;
     }
   });
   await articles
@@ -22,7 +22,6 @@ router.get("/articles", async (ctx) => {
     .skip((pageIndex - 1) * pageSize)
     .limit(pageIndex * pageSize)
     .then((Data) => {
-      // if (!err) {
       ctx.body = {
         Code: 200,
         message: "success",
@@ -69,14 +68,14 @@ router.post("/updateRead", async (ctx) => {
   // multi (boolean)： 默认为false。是否更新多个查询记录。
   // return;
   await information.updateOne({ $inc: { read: 1 / 2 } }, (err, res) => {
-    if (!ctx.session.isLogin) {
-      ctx.body = {
-        code: 401,
-        success: false,
-        msg: "请先确认信息",
-      };
-      return;
-    }
+    // if (!ctx.session.isLogin) {
+    //   ctx.body = {
+    //     code: 401,
+    //     success: false,
+    //     msg: "请先确认信息",
+    //   };
+    //   return;
+    // }
     if (res.n != 0) {
       ctx.body = {
         code: 200,
@@ -94,30 +93,33 @@ router.post("/updateRead", async (ctx) => {
 });
 
 // 信息确认
-router.post("/addReader", async (ctx) => {
+// router.post("/addReader", async (ctx) => {
+  // console.log(ctx.request.body);
   // const { name, email } = ctx.request.body;
-  //先查找是否存在该数据,返回true为存在,false为不存在
-  await reader
-    .findOne({
-      name,
-    })
-    .then((result) => {
-      if (result) {
-        ctx.body = {
-          success: false,
-          msg: "已存在相同昵称",
-        };
-      } else {
-        new reader({
-          name,
-          email,
-        }).save();
-        ctx.body = {
-          success: true,
-          msg: "信息确认成功",
-        };
-        ctx.session.isRead = true;
-      }
-    });
-});
+  // //先查找是否存在该数据,返回true为存在,false为不存在
+  // // console.log(name,email);
+  // console.log(111111111);
+  // await reader
+  //   .findOne({
+  //     name,
+  //   })
+  //   .then((result) => {
+  //     if (result) {
+  //       ctx.body = {
+  //         success: false,
+  //         msg: "已存在相同昵称",
+  //       };
+  //     } else {
+  //       new reader({
+  //         name,
+  //         email,
+  //       }).save();
+  //       ctx.body = {
+  //         success: true,
+  //         msg: "信息确认成功",
+  //       };
+  //       // ctx.session.isRead = true;
+  //     }
+  //   });
+// });
 module.exports = router;

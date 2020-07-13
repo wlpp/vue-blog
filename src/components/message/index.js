@@ -18,7 +18,7 @@ message.install = function(options) {
     data: options,
   }).$mount();
 
-//   document.body.appendChild(instance.$el);
+  document.querySelector(".message") !== null && document.querySelector(".message").remove();
   document.body.appendChild(instance.$el);
   Vue.nextTick(() => {
     instance.visible = true;

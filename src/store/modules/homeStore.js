@@ -13,7 +13,7 @@ export default {
     pageIndex: 1,
     pageSize: 5,
     pageTotal: 0,
-    loginPopup: true,
+    loginPopup: false,
     isRead: false,
   },
   getters: {},
@@ -96,6 +96,8 @@ export default {
     // 点击搜索
     handleSearch({ state, dispatch }, value) {
       state.title = value;
+      // state.pageIndex = 1;
+
       dispatch("getArticles");
     },
     // 点击翻页

@@ -23,8 +23,6 @@
 </template>
 <script>
 import { mapMutations, mapActions } from "vuex";
-import homeApi from "@/api/homeApi";
-
 export default {
   props: {
     show: {
@@ -45,28 +43,20 @@ export default {
     ...mapActions("homeStore", ["updateRead"]),
     // 确定
     handleConfirm() {
-      // const reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
-      // if (this.name === "") {
-      //   this.$message("昵称不能为空");
-      //   return;
-      // }
-      // if (this.email === "") {
-      //   this.$message("邮箱不能为空");
-      //   return;
-      // }
-      // if (!reg.test(this.email)) {
-      //   this.$message("邮箱格式不正确");
-      //   return;
-      // }
-      const parmas = { name: this.name, email: this.email };
-      homeApi
-        .addReader(parmas)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+      if (this.name === "") {
+        this.$message("昵称不能为空");
+        return;
+      }
+      if (this.email === "") {
+        this.$message("邮箱不能为空"); 
+        return;
+      }
+      if (!reg.test(this.email)) {
+        this.$message("邮箱格式不正确");
+        return;
+      }
+      this.updateRead()
     },
   },
 };

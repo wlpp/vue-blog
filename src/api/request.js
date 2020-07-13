@@ -1,15 +1,8 @@
 import axios from "axios";
-const request = (url, method = "get") => {
-  return axios({
-    url,
-    method,
-  })
-    .then((res) => {
-      return res;
-    })
-    .catch((err) => {
-      return err;
-    });
+const request = (methods, url, params) => {
+  return axios[methods](url, methods === "get" ? { params } : params)
+    .then((res) => res)
+    .catch((err) => err);
 };
 
 export default request;

@@ -18,7 +18,7 @@
         ><i title="订阅">订阅</i>
       </p>
     </div>
-    <button class="ordme-btn" :class="isRead && 'active_b'" @click="updateRead">
+    <button class="ordme-btn" :class="isRead && 'active_b'" @click="setLoginPopup(0)">
       <span>{{ isRead ? "已订阅" : "订 阅" }}</span>
     </button>
     <div></div>
@@ -32,7 +32,7 @@ export default {
   props: {
     information: {
       type: Object,
-      defalut: {}, 
+      defalut: {},
     },
   },
   computed: {
