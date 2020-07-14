@@ -17,7 +17,7 @@ export default {
     ...mapState("homeStore", ["archive", "tags", "tagNames", "pageTotal", "pageIndex", "blogger","loginPopup"]),
   },
   methods: {
-    ...mapMutations("homeStore", [""]),
+    ...mapMutations("homeStore", ["goArticle"]),
     ...mapActions("homeStore", ["getArchive", "getTags", "handleTag", "handleSearch", "handlePage", "getBlogger"]),
   },
   mounted() {

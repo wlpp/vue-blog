@@ -6,9 +6,6 @@ const blogger = require("../models/blogger");
 
 // 文章列表
 router.get("/archive", async (ctx) => {
-  new archive({
-    title:'111'
-  })
   const tagNames = eval("/^.*" + ctx.query.tagNames + ".*$/");
   const title = eval("/^.*" + ctx.query.title + ".*$/");
   const pageIndex = ctx.query.pageIndex;
@@ -70,7 +67,7 @@ router.get("/blogger", async (ctx) => {
 router.post("/updateRead", async (ctx) => {
   // multi (boolean)： 默认为false。是否更新多个查询记录。
   // return;
-  await information.updateOne({ $inc: { read: 1 / 2 } }, (err, res) => {
+  await blogger.updateOne({ $inc: { read: 1 / 2 } }, (err, res) => {
     // if (!ctx.session.isLogin) {
     //   ctx.body = {
     //     code: 401,

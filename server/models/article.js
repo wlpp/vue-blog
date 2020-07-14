@@ -3,13 +3,13 @@ const mongoose = require("mongoose");
 // userSchema为表名称
 const articleSchema = new mongoose.Schema(
   {
-    commentNum: String,
-    contents: String,
     id: Number,
+    title: String,
+    content: String,
+    tagNames: String,
+    commentNum: Number,
     likeNum: Number,
     readNum: Number,
-    tagNames: String,
-    title: String,
   },
   {
     // 获取数据创建/更新时间

@@ -1,18 +1,21 @@
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
+import marked from "marked";
+
 export default {
   data() {
     return {};
   },
+
   computed: {
     ...mapState("articleStore", ["bodyHtml"]),
+    html() {
+      return marked("# qq\n```\nasdfsdfsa\n```");
+    },
   },
   methods: {
-    // getHtml(value) {
-    //   console.log(value);
-    //   this.bodyHtml = marked(value);
-    // },
+    ...mapActions("articleStore", ["getArticle"]),
   },
   mounted() {
-    console.log(this.bodyHtml);
+    this.getArticle(this.$route.params.id);
   },
 };

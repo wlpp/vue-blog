@@ -6,7 +6,7 @@
           <b>当前检索条件:</b><span v-if="tagNames !== ''">{{ tagNames }}</span>
         </div>
         <div class="page-box">
-          <div class="page-item" v-for="(item, index) in archive" :key="index">
+          <div class="page-item" v-for="(item, index) in archive" :key="index" @click="goArticle(item.id)">
             <div class="page-item--meta">
               <span v-for="(c_item, c_index) in item.tagNames" :key="c_index">{{ c_item }}</span>
             </div>

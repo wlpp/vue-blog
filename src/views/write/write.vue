@@ -1,6 +1,6 @@
 <template>
   <div class="write">
-    <mavon-editor v-model="value" @save="saveMarkdown" />
+    <mavon-editor v-model="value" @save="saveArticle" />
   </div>
 </template>
 
@@ -21,9 +21,9 @@ export default {
     },
   },
   methods: {
-    ...mapActions("articleStore", ["saveMarkdown"]),
-    getBodyHtml(value) {
-      this.bodyHtml = marked(value);
+    ...mapActions("articleStore", ["saveArticle"]),
+    getBodyHtml(content) {
+      this.bodyHtml = marked(content);
     },
   },
 };

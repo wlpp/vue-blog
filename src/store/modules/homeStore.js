@@ -1,6 +1,6 @@
 import Vue from "vue";
 import homeApi from "@/api/homeApi";
-
+import path from "@/helpers/path";
 export default {
   namespaced: true, //添加后该模块的getters,mutations，actions将不再全局调用
   state: {
@@ -38,6 +38,10 @@ export default {
           state.loginPopup = false;
           break;
       }
+    },
+    // 去文章页
+    goArticle(state, id) {
+      path.goArticle(id);
     },
   },
   actions: {
