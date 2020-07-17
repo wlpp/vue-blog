@@ -3,8 +3,9 @@ input[type=reset],
 input[type=search],
 input[type=submit],
 textarea {
-    -webkit-appearance: none
+    -webkit-appearance: none;
 }
+
 
 li {
     list-style: none;
@@ -16,19 +17,33 @@ html {
     padding: 0
 }
 
-body {
+body,
+html {
     font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #f8f8f8;
-    margin: 0
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    margin: 0;
+    font-family: Lato, Microsoft Jhenghei, Hiragino Sans GB, Microsoft YaHei, sans-serif;
+    background-color: #fff;
 }
 
-body,
-button,
-input,
-textarea {
-    font-family: Noto Sans CJK SC, Source Han Sans CN, Helvetica Neue, Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei, SimSun, sans-serif
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgba(144, 146, 152, .3);
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+
 }
 
 button,
@@ -176,6 +191,50 @@ img {
     }
 }
 
+.flipX-enter-active {
+    animation: flipInX .8s
+}
+
+.flipX-leave-active {
+    animation: flipOutX .8s
+}
+
+@keyframes flipInX {
+    0% {
+        opacity: 0;
+        transform: perspective(400px) rotateX(90deg) scale3d(1.2, 1.2, 1.2)
+    }
+
+    50% {
+        opacity: 1;
+        -webkit-animation-timing-function: cubic-bezier(.455, .03, .515, .955);
+        animation-timing-function: cubic-bezier(.455, .03, .515, .955);
+        transform: perspective(400px) rotateX(-20deg) scaleX(1)
+    }
+
+    to {
+        transform: perspective(400px) rotateX(0deg) scaleX(1)
+    }
+}
+
+@keyframes flipOutX {
+    0% {
+        transform: perspective(400px) rotateX(0deg) scaleX(1)
+    }
+
+    60% {
+        opacity: 1;
+        -webkit-animation-timing-function: cubic-bezier(.455, .03, .515, .955);
+        animation-timing-function: cubic-bezier(.455, .03, .515, .955);
+        transform: perspective(400px) rotateX(-30deg) scaleX(1)
+    }
+
+    to {
+        opacity: 0;
+        transform: perspective(400px) rotateX(90deg) scale3d(1.2, 1.2, 1.2)
+    }
+}
+
 @media screen and (min-width: 769px) {
     .header-warp {
         width: 1000px;
@@ -194,6 +253,11 @@ img {
 
 }
 
+// @media screen and (max-width: 1680px) {
+// .article_menu{
+//     right: 22% !important;
+// }
+// }
 @media screen and (max-width: 768px) {
     .header-warp {
         width: 100%;

@@ -1,6 +1,6 @@
 <template>
   <div class="write">
-    <mavon-editor v-model="value" @save="saveArticle" />
+    <mavon-editor v-model="value"  :ishljs = "true" @save="saveArticle" />
   </div>
 </template>
 

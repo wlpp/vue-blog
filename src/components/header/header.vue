@@ -28,6 +28,8 @@ export default {
   background: url("@{imgUrl}/header_bg.png") top/cover no-repeat;
   margin-bottom: 15px;
   box-sizing: border-box;
+  position: relative;
+  z-index: 10;
 
   &-warp {
     height: 100%;
