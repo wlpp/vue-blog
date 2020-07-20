@@ -1,6 +1,7 @@
 const router = require("koa-router")();
 const article = require("../models/article");
 const comment = require("../models/comment");
+const blogger = require("../models/comment");
 
 // 获取文章
 router.get("/getArticle", async (ctx) => {
@@ -72,6 +73,7 @@ router.post("/likeArticle", async (ctx) => {
         success: true,
         msg: "点赞成功",
       };
+      // blogger.updateOne({ $inc: { read: 1 / 2 } })
     } else {
       ctx.body = {
         code: 404,

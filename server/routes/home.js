@@ -11,12 +11,6 @@ router.get("/archive", async (ctx) => {
   const pageIndex = ctx.query.pageIndex;
   const pageSize = ctx.query.pageSize;
   let pageTotal = 0;
-  // 获取总数量
-  await archive.find({ tagNames, title }, (err, Data2) => {
-    if (!err) {
-      pageTotal = Data2.length > pageSize ? Math.ceil(Data2.length / pageSize)  : 1;
-    }
-  });
   await archive
     .find({ tagNames, title })
     .skip((pageIndex - 1) * pageSize)
@@ -65,17 +59,7 @@ router.get("/blogger", async (ctx) => {
 
 // 订阅博主
 router.post("/updateRead", async (ctx) => {
-  // multi (boolean)： 默认为false。是否更新多个查询记录。
-  // return;
   await blogger.updateOne({ $inc: { read: 1 / 2 } }, (err, res) => {
-    // if (!ctx.session.isLogin) {
-    //   ctx.body = {
-    //     code: 401,
-    //     success: false,
-    //     msg: "请先确认信息",
-    //   };
-    //   return;
-    // }
     if (res.n != 0) {
       ctx.body = {
         code: 200,
@@ -94,32 +78,32 @@ router.post("/updateRead", async (ctx) => {
 
 // 信息确认
 // router.post("/addReader", async (ctx) => {
-  // console.log(ctx.request.body);
-  // const { name, email } = ctx.request.body;
-  // //先查找是否存在该数据,返回true为存在,false为不存在
-  // // console.log(name,email);
-  // console.log(111111111);
-  // await reader
-  //   .findOne({
-  //     name,
-  //   })
-  //   .then((result) => {
-  //     if (result) {
-  //       ctx.body = {
-  //         success: false,
-  //         msg: "已存在相同昵称",
-  //       };
-  //     } else {
-  //       new reader({
-  //         name,
-  //         email,
-  //       }).save();
-  //       ctx.body = {
-  //         success: true,
-  //         msg: "信息确认成功",
-  //       };
-  //       // ctx.session.isRead = true;
-  //     }
-  //   });
+// console.log(ctx.request.body);
+// const { name, email } = ctx.request.body;
+// //先查找是否存在该数据,返回true为存在,false为不存在
+// // console.log(name,email);
+// console.log(111111111);
+// await reader
+//   .findOne({
+//     name,
+//   })
+//   .then((result) => {
+//     if (result) {
+//       ctx.body = {
+//         success: false,
+//         msg: "已存在相同昵称",
+//       };
+//     } else {
+//       new reader({
+//         name,
+//         email,
+//       }).save();
+//       ctx.body = {
+//         success: true,
+//         msg: "信息确认成功",
+//       };
+//       // ctx.session.isRead = true;
+//     }
+//   });
 // });
 module.exports = router;
