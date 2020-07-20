@@ -15,7 +15,7 @@ export default {
   },
 
   computed: {
-    ...mapState("articleStore", ["bodyHtml", "menuList", "articleData", "load", "clickLike"]),
+    ...mapState("articleStore", ["bodyHtml", "menuList", "articleData", "commnetList","load", "clickLike"]),
 
     // 初始化时间
     createdTime() {
@@ -26,7 +26,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions("articleStore", ["getArticle", "likeArticle"]),
+    ...mapActions("articleStore", ["getArticle", "likeArticle","getComment"]),
     ...mapMutations("articleStore", ["setClickLike"]),
     // 页面滚动
     bodyScroll() {
@@ -56,6 +56,7 @@ export default {
   },
   mounted() {
     this.getArticle(this.$route.params.id);
+    this.getComment(this.$route.params.id)
     window.addEventListener("scroll", this.bodyScroll);
   },
   destroyed() {

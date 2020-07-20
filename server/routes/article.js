@@ -1,5 +1,6 @@
 const router = require("koa-router")();
 const article = require("../models/article");
+const comment = require("../models/comment");
 
 // 获取文章
 router.get("/getArticle", async (ctx) => {
@@ -79,6 +80,38 @@ router.post("/likeArticle", async (ctx) => {
       };
     }
   });
+});
+
+// 获取评论
+router.get("/getComment", async (ctx) => {
+  const articleId = ctx.query.articleId;
+  // const pageIndex = 1;
+  // const pageSize = 10;
+  let pageTotal = 0;
+  // 获取总数量
+  await comment.find({ articleId }, (err, Data) => {
+    if (!err) {
+           ctx.body = {
+        code: 200,
+        message: "success",
+        Data,
+        pageTotal,
+      };
+      // pageTotal = Data2.length > pageSize ? Math.ceil(Data2.length / pageSize) : 1;
+    }
+  });
+  // await comment
+  //   .find({ articleId })
+  //   .skip((pageIndex - 1) * pageSize)
+  //   .limit(pageIndex * pageSize)
+  //   .then((Data) => {
+  //     ctx.body = {
+  //       Code: 200,
+  //       message: "success",
+  //       Data,
+  //       pageTotal,
+  //     };
+  //   });
 });
 
 module.exports = router;

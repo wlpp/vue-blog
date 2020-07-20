@@ -12,4 +12,7 @@ export default {
   likeArticle: async (params) => {
     return request("post", "/likeArticle", params);
   },
+  getComment: async (params) => {
+    return request("get", "/getComment", params);
+  },
 };

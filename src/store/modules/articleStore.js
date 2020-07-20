@@ -7,6 +7,7 @@ export default {
     bodyHtml: "",
     paramsId: "",
     menuList: [],
+    commnetList: [],
     load: true,
     articleData: {},
     likeInfo: [],
@@ -59,20 +60,51 @@ export default {
         })
         .catch((err) => {
           state.load = false;
-          console.log(err);
+          console.log(err, "getArticle");
         });
     },
     // 点赞文章
     likeArticle({ state, dispatch }) {
       if (state.clickLike) return;
-      articleApi.likeArticle({ id: state.paramsId }).then((res) => {
-        if (res.data.code === 200) {
-          state.clickLike = true;
-          state.likeInfo.push(state.paramsId);
-          localStorage.setItem("likeInfo", JSON.stringify(state.likeInfo));
-          dispatch("getArticle", state.paramsId);
-        }
-      });
+      articleApi
+        .likeArticle({ id: state.paramsId })
+        .then((res) => {
+          if (res.data.code === 200) {
+            state.clickLike = true;
+            state.likeInfo.push(state.paramsId);
+            localStorage.setItem("likeInfo", JSON.stringify(state.likeInfo));
+            dispatch("getArticle", state.paramsId);
+          }
+        })
+        .catch((err) => {
+          console.log(err, "likeArticle");
+        });
+    },
+    // 获取文章评论
+    getComment({ state }, id) {
+      const params = {
+        articleId: id,
+      };
+      articleApi
+        .getComment(params)
+        .then((res) => {
+          if (res.data.code === 200) {
+            state.commnetList = res.data.Data.map((item) => {
+              return {
+                ...item,
+                guestName: item.guestName.slice(0, 1),
+                createTime: new Date(Date.parse(item.createTime)).toLocaleString(),
+                timerShaft: Date.parse(item.createTime),
+              };
+            }).sort((a, b) => {
+              return a.createTime - b.createTime;
+            });
+            console.log(state.commnetList);
+          }
+        })
+        .catch((err) => {
+          console.log(err, "getComment");
+        });
     },
   },
 };

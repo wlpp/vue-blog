@@ -16,15 +16,15 @@
           <div class="submit">提交</div>
         </div>
         <div class="article_comment--content">
-          <div class="comment_item" v-for="(item, index) in 4" :key="index">
-            <div class="comment_item--img">V</div>
+          <div class="comment_item" v-for="(item, index) in commnetList" :key="index">
+            <div class="comment_item--img">{{item.guestName}}</div>
             <div class="comment_item--content">
               <p class="name">
                 <span>v</span>
                 <span>{{ index + 1 }}楼</span>
               </p>
-              <p class="time">2020-04-14日07:40:45</p>
-              <div class="detail">底部备案工</div>
+              <p class="time">{{item.createTime}}</p>
+              <div class="detail">{{item.commentText}}</div>
               <div class="control">
                 <i class="iconfont iconpinglun"></i>
                 <span>回复</span>
