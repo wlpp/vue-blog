@@ -15,6 +15,7 @@ export default {
     pageTotal: 0,
     loginPopup: false,
     isRead: false,
+    userInfo: null,
   },
   getters: {},
   mutations: {
@@ -42,6 +43,20 @@ export default {
     // 去文章页
     goArticle(state, id) {
       path.goArticle(id);
+    },
+    setCookie(state, payload) {
+      var d = new Date();
+      d.setTime(d.getTime() + payload.hours * 3600 * 1000);
+      document.cookie = payload.key + "=" + payload.value + "; expires=" + d.toGMTString(); //时差相差8小时
+    },
+    getCookie(state, key) {
+      var cookieArr = document.cookie.split("; ");
+      for (var i = 0; i < cookieArr.length; i++) {
+        var arr = cookieArr[i].split("=");
+        arr[0] === key && (state.userInfo = arr[1]);
+        return;
+      }
+      console.log("cookie匹配不成功");
     },
   },
   actions: {
@@ -79,12 +94,13 @@ export default {
         });
     },
     // 博主信息
-    getBlogger({ state }) {
-      state.isRead = localStorage.getItem("isRead");
+    getBlogger({ state, commit }) {
+      commit("getCookie", "USER_INFO");
+      state.userInfo && (state.isRead = true);
       homeApi
         .getBlogger()
         .then((res) => {
-          if (res.data.Code === 200) {
+          if (res.data.code === 200) {
             state.blogger = res.data.Data[0];
           }
         })
@@ -100,8 +116,6 @@ export default {
     // 点击搜索
     handleSearch({ state, dispatch }, value) {
       state.title = value;
-      // state.pageIndex = 1;
-
       dispatch("getArchive");
     },
     // 点击翻页
@@ -127,7 +141,6 @@ export default {
           if (res.data.success) {
             state.loginPopup = false;
             state.isRead = true;
-            localStorage.setItem("isRead", true);
             Vue.prototype.$message(res.data.msg);
             dispatch("getBlogger");
           }

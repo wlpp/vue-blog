@@ -9,4 +9,7 @@ export default {
   addArticle: async (params) => {
     return request("post", "/addArticle", params);
   },
+  likeArticle: async (params) => {
+    return request("post", "/likeArticle", params);
+  },
 };

@@ -51,7 +51,7 @@ router.get("/blogger", async (ctx) => {
   await blogger.find((err, Data) => {
     if (!err) {
       ctx.body = {
-        Code: 200,
+        code: 200,
         message: "success",
         Data,
       };

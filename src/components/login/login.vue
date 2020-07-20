@@ -39,7 +39,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations("homeStore", ["setLoginPopup"]),
+    ...mapMutations("homeStore", ["setLoginPopup", "setCookie"]),
     ...mapActions("homeStore", ["updateRead"]),
     // 确定
     handleConfirm() {
@@ -56,6 +56,7 @@ export default {
         this.$message("邮箱格式不正确");
         return;
       }
+      this.setCookie({ key: "USER_INFO", value: JSON.stringify({ name: this.name, email: this.email }), hours: 1 });
       this.updateRead();
     },
   },

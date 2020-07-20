@@ -1,5 +1,25 @@
 const router = require("koa-router")();
 const article = require("../models/article");
+
+// 获取文章
+router.get("/getArticle", async (ctx) => {
+  const id = ctx.query.id;
+  await article.findOne({ id }, (err, data) => {
+    if (!err) {
+      ctx.body = {
+        code: 200,
+        data: data || [],
+        success: true,
+      };
+    } else {
+      ctx.body = {
+        code: 404,
+        success: false,
+      };
+    }
+  });
+});
+
 // 新增文章
 router.post("/addArticle", async (ctx) => {
   const { id, content, title } = ctx.request.body;
@@ -41,22 +61,24 @@ router.post("/updateArticle", async (ctx) => {
   });
 });
 
-// 获取文章
-router.get("/getArticle", async (ctx) => {
-  const id = ctx.query.id;
-  await article.findOne({ id }, (err, data) => {
-    if (!err) {
+// 喜欢文章
+router.post("/likeArticle", async (ctx) => {
+  const { id } = ctx.request.body;
+  await article.updateOne({ id }, { $inc: { likeNum: 1 / 2 } }, (err, res) => {
+    if (res.n != 0) {
       ctx.body = {
         code: 200,
-        data: data || [],
         success: true,
+        msg: "点赞成功",
       };
     } else {
       ctx.body = {
         code: 404,
         success: false,
+        msg: "点赞失败",
       };
     }
   });
 });
+
 module.exports = router;

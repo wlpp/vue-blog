@@ -2,7 +2,7 @@
   <div class="header">
     <div class="header-warp">
       <nav>
-        <li class="active">主页</li>
+        <li class="active" @click="handleJump('/home')">主页</li>
         <li>书籍</li>
         <li>行博</li>
         <li>简介</li>
@@ -14,7 +14,12 @@
 <script>
 export default {
   data() {
-    return {};  
+    return {};
+  },
+  methods: {
+    handleJump(path) {
+      this.$router.push({ path });
+    },
   },
 };
 </script>

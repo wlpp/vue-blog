@@ -1,15 +1,15 @@
 <template>
   <div class="article">
     <div class="article_content">
-      <h1 class="article_title">{{articleData && articleData.title}}</h1>
+      <div class="article_title">{{ articleData && articleData.title }}</div>
       <div class="article_meta">
-        <span>发表时间:{{createdTime}}</span>
-        <span>更新时间:{{updatedTime}}</span>
+        <span>发表时间:{{ createdTime }}</span>
+        <span>更新时间:{{ updatedTime }}</span>
       </div>
       <!-- 文章内容 -->
       <div v-highlight class="markdown-body" v-html="bodyHtml"></div>
       <!-- 文章评论 -->
-      <div class="article_comment">
+      <div class="article_comment" id="article_comment">
         <div class="article_comment--title">Hi~</div>
         <div class="article_comment--action">
           <textarea placeholder="写下你的评论..." type="text"></textarea>
@@ -49,7 +49,7 @@
           v-for="(item, index) in menuList"
           :class="item.menuText == menuText && 'act_item'"
           :key="index"
-          @click="scrollAppoint(item.menuText, item.offsetTop)"
+          @click="scrollAppoint(item.menuText)"
         >
           {{ item.menuText }}
         </div>
@@ -58,10 +58,19 @@
 
     <!-- 点赞悬浮 -->
     <div class="article_suspended">
-      <div class="article_suspended--item " :badge="articleData && articleData.likeNum">
+      <div
+        class="article_suspended--item"
+        :class="clickLike && 'act_suspended'"
+        :badge="articleData && articleData.likeNum"
+        @click="likeArticle"
+      >
         <i class="iconfont iconzang"></i>
       </div>
-      <div class="article_suspended--item" :badge="articleData && articleData.commentNum">
+      <div
+        class="article_suspended--item"
+        :badge="articleData && articleData.commentNum"
+       @click="scrollAppoint('article_comment')"
+      >
         <i class="iconfont iconpinglun"></i>
       </div>
     </div>
