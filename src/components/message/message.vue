@@ -53,6 +53,7 @@ export default {
   z-index: 999;
   transition: all 0.3s linear;
   opacity: 0;
+  pointer-events: none;
 }
 .active {
   opacity: 1;

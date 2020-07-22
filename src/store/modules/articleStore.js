@@ -12,6 +12,9 @@ export default {
     articleData: {},
     likeInfo: [],
     clickLike: false,
+    pageIndex: 1,
+    pageSize: 5,
+    pageTotal: 0,
   },
   getters: {},
   mutations: {
@@ -81,30 +84,72 @@ export default {
         });
     },
     // 获取文章评论
-    getComment({ state }, id) {
+    getComment({ state }) {
       const params = {
-        articleId: id,
+        articleId: state.paramsId,
+        pageIndex: state.pageIndex,
+        pageSize: state.pageSize,
       };
       articleApi
         .getComment(params)
         .then((res) => {
           if (res.data.code === 200) {
-            state.commnetList = res.data.Data.map((item) => {
-              return {
-                ...item,
-                guestName: item.guestName.slice(0, 1),
-                createTime: new Date(Date.parse(item.createTime)).toLocaleString(),
-                timerShaft: Date.parse(item.createTime),
-              };
-            }).sort((a, b) => {
-              return a.createTime - b.createTime;
-            });
-            console.log(state.commnetList);
+            state.commnetList = res.data.data
+              .map((item) => {
+                return {
+                  ...item,
+                  guestImage: item.guestName.slice(0, 1),
+                  createTime: new Date(Date.parse(item.createTime)).toLocaleString(),
+                  timerShaft: Date.parse(item.createTime),
+                };
+              })
+              .sort((a, b) => {
+                return a.createTime - b.createTime;
+              });
+            state.pageTotal = res.data.pageTotal;
           }
         })
         .catch((err) => {
           console.log(err, "getComment");
         });
+    },
+    // 新增文章评论
+    addComment({ state, dispatch }, commentText) {
+      if (!this.state.loginStore.isRead) {
+        this.state.loginStore.isLogin = true;
+        return;
+      }
+      if (commentText === "") {
+        Vue.prototype.$message("内容不能为空");
+        return;
+      }
+      const params = {
+        articleId: state.paramsId,
+        guestName: JSON.parse(this.state.loginStore.userInfo).name,
+        commentText,
+      };
+      articleApi
+        .addComment(params)
+        .then((res) => {
+          dispatch("getComment", state.paramsId);
+          Vue.prototype.$message(res.data.msg);
+        })
+        .catch((err) => console.log(err, "addComment"));
+    },
+    // 点击翻页
+    handlePage({ state, dispatch }, type) {
+      if (state.pageTotal === 1) {
+        return;
+      }
+      switch (type) {
+        case 0:
+          state.pageIndex > 1 && state.pageIndex--;
+          break;
+        case 1:
+          state.pageIndex < state.pageTotal && state.pageIndex++;
+          break;
+      }
+      dispatch("getComment");
     },
   },
 };

@@ -12,8 +12,8 @@ const commentSchema = new mongoose.Schema(
   {
     // 获取数据创建/更新时间
     timestamps: {
-      createdAt: "created",
-      updatedAt: "updated",
+      createdAt: "createTime",
+      updatedAt: "updateTime",
     },
   }
 );

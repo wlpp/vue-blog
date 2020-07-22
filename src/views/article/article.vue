@@ -12,19 +12,19 @@
       <div class="article_comment" id="article_comment">
         <div class="article_comment--title">Hi~</div>
         <div class="article_comment--action">
-          <textarea placeholder="写下你的评论..." type="text"></textarea>
-          <div class="submit">提交</div>
+          <textarea placeholder="写下你的评论..." v-model="commentText" type="text"></textarea>
+          <div class="submit" @click="addComment(commentText)">提交</div>
         </div>
         <div class="article_comment--content">
           <div class="comment_item" v-for="(item, index) in commnetList" :key="index">
-            <div class="comment_item--img">{{item.guestName}}</div>
+            <div class="comment_item--img">{{ item.guestImage }}</div>
             <div class="comment_item--content">
               <p class="name">
-                <span>v</span>
+                <span>{{ item.guestName }}</span>
                 <span>{{ index + 1 }}楼</span>
               </p>
-              <p class="time">{{item.createTime}}</p>
-              <div class="detail">{{item.commentText}}</div>
+              <p class="time">{{ item.createTime }}</p>
+              <div class="detail">{{ item.commentText }}</div>
               <div class="control">
                 <i class="iconfont iconpinglun"></i>
                 <span>回复</span>
@@ -33,10 +33,19 @@
           </div>
         </div>
         <div class="article_comment--page">
-          <span>共<b>1</b>页</span>
-          <span>当前页:<b>1</b></span>
-          <span class="arrow"> <i class="iconfont iconleft"></i>上一页</span>
-          <span class="arrow"> 下一页 <i class="iconfont iconright"></i></span>
+          <span
+            >共<b>{{ pageTotal }}</b
+            >页</span
+          >
+          <span
+            >当前页:<b>{{ pageIndex }}</b></span
+          >
+          <span class="arrow" :class="pageIndex === 1 && 'disable'" @click="handlePage(0)">
+            <i class="iconfont iconleft"></i>上一页</span
+          >
+          <span class="arrow" :class="pageIndex === pageTotal && 'disable'" @click="handlePage(1)">
+            下一页 <i class="iconfont iconright"></i
+          ></span>
         </div>
       </div>
     </div>
@@ -69,7 +78,7 @@
       <div
         class="article_suspended--item"
         :badge="articleData && articleData.commentNum"
-       @click="scrollAppoint('article_comment')"
+        @click="scrollAppoint('article_comment')"
       >
         <i class="iconfont iconpinglun"></i>
       </div>

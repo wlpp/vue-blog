@@ -23,9 +23,7 @@ export default {
       !this.isClick && document.querySelector("body").scrollIntoView({ behavior: "smooth" });
       this.isClick = true;
       const timer = setTimeout(() => (this.isClick = false), 1000);
-      this.$once("hook:beforeDestroy", () => {
-        clearTimeout(timer);
-      });
+      this.$once("hook:beforeDestroy", () => clearTimeout(timer));
     },
   },
 };

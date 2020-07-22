@@ -10,19 +10,20 @@ export default {
     return {
       value: null,
       isClick: false,
-      
     };
   },
   computed: {
-    ...mapState("homeStore", ["archive", "tags", "tagNames", "pageTotal", "pageIndex", "blogger","loginPopup"]),
+    ...mapState("homeStore", ["archive", "tags", "tagNames", "pageTotal", "pageIndex", "blogger", "loginPopup"]),
   },
   methods: {
     ...mapMutations("homeStore", ["goArticle"]),
+    ...mapActions("loginStore", ["getCookie"]),
     ...mapActions("homeStore", ["getArchive", "getTags", "handleTag", "handleSearch", "handlePage", "getBlogger"]),
   },
   mounted() {
     this.getTags();
     this.getArchive();
+    this.getCookie();
     this.getBlogger();
   },
 };

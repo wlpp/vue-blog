@@ -15,4 +15,7 @@ export default {
   getComment: async (params) => {
     return request("get", "/getComment", params);
   },
+  addComment: async (params) => {
+    return request("post", "/addComment", params);
+  },
 };

@@ -17,12 +17,12 @@
         </div>
       </div>
       <div class="login-button sure" @click="handleConfirm" @keyup.enter="handleConfirm">确定</div>
-      <div class="login-button close" @click="setLoginPopup(1)">关闭</div>
+      <div class="login-button close" @click="setLogin(1)">关闭</div>
     </div>
   </transition>
 </template>
 <script>
-import { mapMutations, mapActions } from "vuex";
+import { mapActions } from "vuex";
 export default {
   props: {
     show: {
@@ -39,7 +39,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations("homeStore", ["setLoginPopup", "setCookie"]),
+    ...mapActions("loginStore", ["setLogin", "setCookie"]),
     ...mapActions("homeStore", ["updateRead"]),
     // 确定
     handleConfirm() {

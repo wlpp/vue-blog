@@ -13,8 +13,6 @@ export default {
     pageIndex: 1,
     pageSize: 5,
     pageTotal: 0,
-    loginPopup: false,
-    isRead: false,
     userInfo: null,
   },
   getters: {},
@@ -29,34 +27,10 @@ export default {
       });
       state.archive = arr;
     },
-    // 登录弹框
-    setLoginPopup(state, type) {
-      switch (type) {
-        case 0:
-          if (!state.isRead) state.loginPopup = true;
-          break;
-        case 1:
-          state.loginPopup = false;
-          break;
-      }
-    },
+
     // 去文章页
     goArticle(state, id) {
       path.goArticle(id);
-    },
-    setCookie(state, payload) {
-      var d = new Date();
-      d.setTime(d.getTime() + payload.hours * 3600 * 1000);
-      document.cookie = payload.key + "=" + payload.value + "; expires=" + d.toGMTString(); //时差相差8小时
-    },
-    getCookie(state, key) {
-      var cookieArr = document.cookie.split("; ");
-      for (var i = 0; i < cookieArr.length; i++) {
-        var arr = cookieArr[i].split("=");
-        arr[0] === key && (state.userInfo = arr[1]);
-        return;
-      }
-      console.log("cookie匹配不成功");
     },
   },
   actions: {
@@ -93,15 +67,12 @@ export default {
         });
     },
     // 博主信息
-    getBlogger({ state, commit }) {
-      commit("getCookie", "USER_INFO");
-      state.userInfo && (state.isRead = true);
+    getBlogger({state}) {
       homeApi
         .getBlogger()
         .then((res) => {
           if (res.data.code === 200) {
             state.blogger = res.data.Data[0];
-
             state.pageTotal = res.data.Data[0].article > 1 ? Math.ceil(res.data.Data[0].article / state.pageSize) : 1;
           }
         })
@@ -141,7 +112,6 @@ export default {
         .then((res) => {
           if (res.data.success) {
             state.loginPopup = false;
-            state.isRead = true;
             Vue.prototype.$message(res.data.msg);
             dispatch("getBlogger");
           }

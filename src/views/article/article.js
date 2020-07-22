@@ -11,11 +11,12 @@ export default {
       menuText: "",
       show: false,
       timer: false,
+      commentText:''
     };
   },
 
   computed: {
-    ...mapState("articleStore", ["bodyHtml", "menuList", "articleData", "commnetList","load", "clickLike"]),
+    ...mapState("articleStore", ["bodyHtml", "menuList", "articleData", "commnetList", "load", "clickLike","pageTotal", "pageIndex",]),
 
     // 初始化时间
     createdTime() {
@@ -26,7 +27,8 @@ export default {
     },
   },
   methods: {
-    ...mapActions("articleStore", ["getArticle", "likeArticle","getComment"]),
+    ...mapActions("articleStore", ["getArticle", "likeArticle", "getComment","addComment","handlePage"]),
+    ...mapActions("loginStore", ["getCookie"]),
     ...mapMutations("articleStore", ["setClickLike"]),
     // 页面滚动
     bodyScroll() {
@@ -35,6 +37,7 @@ export default {
         this.$nextTick(() => {
           const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
           scrollTop >= 1200 ? (this.show = true) : (this.show = false);
+          scrollTop <= 0 && (this.menuText = "");
           if (scrollTop >= this.menuList[this.menuList.length - 1].offsetTop) {
             this.menuText = this.menuList[this.menuList.length - 1].menuText;
           } else {
@@ -56,7 +59,8 @@ export default {
   },
   mounted() {
     this.getArticle(this.$route.params.id);
-    this.getComment(this.$route.params.id)
+    this.getComment();
+    this.getCookie();
     window.addEventListener("scroll", this.bodyScroll);
   },
   destroyed() {

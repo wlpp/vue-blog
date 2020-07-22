@@ -87,33 +87,41 @@ router.post("/likeArticle", async (ctx) => {
 // 获取评论
 router.get("/getComment", async (ctx) => {
   const articleId = ctx.query.articleId;
-  // const pageIndex = 1;
-  // const pageSize = 10;
+  const pageIndex = ctx.query.pageIndex;
+  const pageSize = ctx.query.pageSize;
   let pageTotal = 0;
   // 获取总数量
-  await comment.find({ articleId }, (err, Data) => {
+  await comment.find({ articleId }, (err, Data2) => {
     if (!err) {
-           ctx.body = {
-        code: 200,
-        message: "success",
-        Data,
-        pageTotal,
-      };
-      // pageTotal = Data2.length > pageSize ? Math.ceil(Data2.length / pageSize) : 1;
+      pageTotal = Data2.length > pageSize ? Math.ceil(Data2.length / pageSize) : 1;
     }
   });
-  // await comment
-  //   .find({ articleId })
-  //   .skip((pageIndex - 1) * pageSize)
-  //   .limit(pageIndex * pageSize)
-  //   .then((Data) => {
-  //     ctx.body = {
-  //       Code: 200,
-  //       message: "success",
-  //       Data,
-  //       pageTotal,
-  //     };
-  //   });
+  await comment
+    .find({ articleId })
+    .skip((pageIndex - 1) * pageSize)
+    .limit(pageIndex * pageSize)
+    .then((data) => {
+      ctx.body = {
+        code: 200,
+        message: "success",
+        data,
+        pageTotal,
+      };
+    });
 });
 
+// 新增评论
+router.post("/addComment", async (ctx) => {
+  const { articleId, guestName, commentText } = ctx.request.body;
+  await new comment({
+    articleId,
+    guestName,
+    commentText,
+  }).save();
+  ctx.body = {
+    code: 200,
+    msg: "评论成功",
+    success: true,
+  };
+});
 module.exports = router;

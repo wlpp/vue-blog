@@ -18,7 +18,7 @@
         ><i title="订阅">订阅</i>
       </p>
     </div>
-    <button class="ordme-btn" :class="isRead && 'active_b'" @click="setLoginPopup(0)">
+    <button class="ordme-btn" :class="isRead && 'active_b'" @click="setLogin(0)">
       <span>{{ isRead ? "已订阅" : "订 阅" }}</span>
     </button>
     <div></div>
@@ -39,10 +39,10 @@ export default {
     avator() {
       return config.imgUrl + "avator.png";
     },
-    ...mapState("homeStore", ["isRead"]),
+    ...mapState("loginStore", ["isRead"]),
   },
   methods: {
-    ...mapMutations("homeStore", ["setLoginPopup"]),
+    ...mapMutations("loginStore", ["setLogin"]),
     ...mapActions("homeStore", ["updateRead"]),
   },
 };

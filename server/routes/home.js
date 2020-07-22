@@ -10,7 +10,6 @@ router.get("/archive", async (ctx) => {
   const title = eval("/^.*" + ctx.query.title + ".*$/");
   const pageIndex = ctx.query.pageIndex;
   const pageSize = ctx.query.pageSize;
-  let pageTotal = 0;
   await archive
     .find({ tagNames, title })
     .skip((pageIndex - 1) * pageSize)
@@ -20,7 +19,6 @@ router.get("/archive", async (ctx) => {
         Code: 200,
         message: "success",
         Data,
-        pageTotal,
       };
     });
 });
