@@ -6,8 +6,8 @@ const commentSchema = new mongoose.Schema(
     articleId: Number,
     guestName: String,
     commentText: String,
-    replyText: String,
     replyGuest: String,
+    replyText: String,
   },
   {
     // 获取数据创建/更新时间

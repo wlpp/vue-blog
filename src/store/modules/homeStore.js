@@ -1,6 +1,7 @@
 import Vue from "vue";
 import homeApi from "@/api/homeApi";
 import path from "@/helpers/path";
+
 export default {
   namespaced: true, //添加后该模块的getters,mutations，actions将不再全局调用
   state: {
@@ -68,9 +69,11 @@ export default {
     },
     // 博主信息
     getBlogger({state}) {
+    console.log(11111111111);
       homeApi
         .getBlogger()
         .then((res) => {
+          console.log(res);
           if (res.data.code === 200) {
             state.blogger = res.data.Data[0];
             state.pageTotal = res.data.Data[0].article > 1 ? Math.ceil(res.data.Data[0].article / state.pageSize) : 1;
@@ -103,22 +106,8 @@ export default {
           state.pageIndex < state.pageTotal && state.pageIndex++;
           break;
       }
+      console.log(Vue.prototype);
       dispatch("getArchive");
-    },
-    // 更新订阅
-    updateRead({ state, dispatch }) {
-      homeApi
-        .updateRead()
-        .then((res) => {
-          if (res.data.success) {
-            state.loginPopup = false;
-            Vue.prototype.$message(res.data.msg);
-            dispatch("getBlogger");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
   },
 };

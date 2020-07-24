@@ -12,6 +12,12 @@
       <div class="article_comment" id="article_comment">
         <div class="article_comment--title">Hi~</div>
         <div class="article_comment--action">
+          <transition name="flipX">
+            <div class="replybar" v-if="replyGuest !== ''">
+              <span>回复 @{{ replyGuest }}</span
+              ><i class="iconfont iconclose" @click="setReplyInfo({ replyGuest: '', replyText: '' })"></i>
+            </div>
+          </transition>
           <textarea placeholder="写下你的评论..." v-model="commentText" type="text"></textarea>
           <div class="submit" @click="addComment(commentText)">提交</div>
         </div>
@@ -24,8 +30,9 @@
                 <span>{{ index + 1 }}楼</span>
               </p>
               <p class="time">{{ item.createTime }}</p>
+              <div class="replyto" v-if="item.replyGuest !== ''">@{{item.replyGuest}}: <span>{{item.replyText}}</span></div>
               <div class="detail">{{ item.commentText }}</div>
-              <div class="control">
+              <div class="control" @click="setReplyInfo({ replyGuest: item.guestName, replyText: item.commentText })">
                 <i class="iconfont iconpinglun"></i>
                 <span>回复</span>
               </div>
@@ -77,7 +84,8 @@
       </div>
       <div
         class="article_suspended--item"
-        :badge="articleData && articleData.commentNum"
+        :class="commnetList.length > 0 && 'act_suspended'"
+        :badge="commnetList && commnetList.length"
         @click="scrollAppoint('article_comment')"
       >
         <i class="iconfont iconpinglun"></i>

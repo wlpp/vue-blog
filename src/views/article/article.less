@@ -20,6 +20,7 @@
             font-size: 13px;
             color: #999;
         }
+
         margin-bottom: 30px;
     }
 
@@ -81,6 +82,38 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            position: relative;
+
+            .replybar {
+                position: absolute;
+                left: 0;
+                top: -23px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                flex-wrap: wrap;
+                color: #fff;
+                margin-left: 1em;
+                background-color: #852a2a;
+                font-size: 14px;
+                border-radius: 4px 4px 0 0;
+                padding: 4px 8px 0;
+                z-index: 11;
+
+                i {
+                    line-height: 1;
+                    color: red;
+                    margin-left: 5px;
+
+                    background-color: transparent;
+                    cursor: pointer;
+                    transition: all .3s ease;
+
+                    &:hover {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
 
             textarea {
                 flex: 1;
@@ -179,6 +212,18 @@
                     .time {
                         font-size: 12px;
                         color: rgb(153, 153, 153)
+                    }
+
+                    .replyto {
+                        background-color: #e5e5e5;
+                        color: #17aaee;
+                        padding: 10px;
+                        font-size: 13px;
+                        margin: 10px 0;
+                        border-radius: 3px;
+                        span {
+                            color: #666;
+                        }
                     }
 
                     .detail {

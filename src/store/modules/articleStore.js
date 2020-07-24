@@ -15,6 +15,8 @@ export default {
     pageIndex: 1,
     pageSize: 5,
     pageTotal: 0,
+    replyGuest: "",
+    replyText: "",
   },
   getters: {},
   mutations: {
@@ -26,6 +28,10 @@ export default {
     },
     setClickLike(state) {
       state.clickLike = false;
+    },
+    setReplyInfo(state, reply) {
+      state.replyGuest = reply.replyGuest;
+      state.replyText = reply.replyText;
     },
   },
   actions: {
@@ -116,6 +122,7 @@ export default {
     // 新增文章评论
     addComment({ state, dispatch }, commentText) {
       if (!this.state.loginStore.isRead) {
+        Vue.prototype.$message("请先填写下信息吧！");
         this.state.loginStore.isLogin = true;
         return;
       }
@@ -123,10 +130,17 @@ export default {
         Vue.prototype.$message("内容不能为空");
         return;
       }
+      const guestName = JSON.parse(this.state.loginStore.userInfo).name;
+      if (state.replyGuest === guestName) {
+        Vue.prototype.$message("不能回复自己哦");
+        return;
+      }
       const params = {
         articleId: state.paramsId,
-        guestName: JSON.parse(this.state.loginStore.userInfo).name,
+        guestName,
         commentText,
+        replyGuest: state.replyGuest,
+        replyText: state.replyText,
       };
       articleApi
         .addComment(params)

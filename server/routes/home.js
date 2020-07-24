@@ -2,6 +2,7 @@ const router = require("koa-router")();
 const archive = require("../models/archive");
 const tags = require("../models/tags");
 const blogger = require("../models/blogger");
+const reader = require("../models/reader");
 // const reader = require("../models/reader");
 
 // 文章列表
@@ -57,51 +58,26 @@ router.get("/blogger", async (ctx) => {
 
 // 订阅博主
 router.post("/updateRead", async (ctx) => {
+  const { name, email } = ctx.request.body;
   await blogger.updateOne({ $inc: { read: 1 / 2 } }, (err, res) => {
     if (res.n != 0) {
       ctx.body = {
         code: 200,
         success: true,
-        msg: "订阅成功",
+        msg: "信息填写成功",
       };
     } else {
       ctx.body = {
         code: 404,
         success: false,
-        msg: "订阅失败",
+        msg: "信息填写失败",
       };
     }
   });
+  await new reader({
+    name,
+    email,
+  }).save();
 });
 
-// 信息确认
-// router.post("/addReader", async (ctx) => {
-// console.log(ctx.request.body);
-// const { name, email } = ctx.request.body;
-// //先查找是否存在该数据,返回true为存在,false为不存在
-// // console.log(name,email);
-// console.log(111111111);
-// await reader
-//   .findOne({
-//     name,
-//   })
-//   .then((result) => {
-//     if (result) {
-//       ctx.body = {
-//         success: false,
-//         msg: "已存在相同昵称",
-//       };
-//     } else {
-//       new reader({
-//         name,
-//         email,
-//       }).save();
-//       ctx.body = {
-//         success: true,
-//         msg: "信息确认成功",
-//       };
-//       // ctx.session.isRead = true;
-//     }
-//   });
-// });
 module.exports = router;

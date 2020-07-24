@@ -22,7 +22,7 @@
   </transition>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 export default {
   props: {
     show: {
@@ -39,25 +39,28 @@ export default {
     };
   },
   methods: {
-    ...mapActions("loginStore", ["setLogin", "setCookie"]),
-    ...mapActions("homeStore", ["updateRead"]),
+    ...mapActions("loginStore", ["setCookie", "updateRead"]),
+    ...mapActions("homeStore", ["getBlogger"]),
+    ...mapMutations("loginStore", ["setLogin"]),
     // 确定
     handleConfirm() {
-      const reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
-      if (this.name === "") {
-        this.$message("昵称不能为空");
-        return;
-      }
-      if (this.email === "") {
-        this.$message("邮箱不能为空");
-        return;
-      }
-      if (!reg.test(this.email)) {
-        this.$message("邮箱格式不正确");
-        return;
-      }
+      // const reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+      // if (this.name === "") {
+      //   this.$message("昵称不能为空");
+      //   return;
+      // }
+      // if (this.email === "") {
+      //   this.$message("邮箱不能为空");
+      //   return;
+      // }
+      // if (!reg.test(this.email)) {
+      //   this.$message("邮箱格式不正确");
+      //   return;
+      // }
       this.setCookie({ key: "USER_INFO", value: JSON.stringify({ name: this.name, email: this.email }), hours: 1 });
-      this.updateRead();
+      this.updateRead({ name: this.name, email: this.email }).then(() => {
+        this.$route.name === "home" && this.getBlogger;
+      });
     },
   },
 };
@@ -66,7 +69,7 @@ export default {
 .login {
   width: 350px;
   height: 426px;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);

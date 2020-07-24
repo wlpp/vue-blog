@@ -9,8 +9,8 @@ export default {
   getBlogger: async () => {
     return request("get", "/blogger");
   },
-  updateRead: async () => {
-    return request("post", "/updateRead");
+  updateRead: async (params) => {
+    return request("post", "/updateRead", params);
   },
   addReader: async (params) => {
     return request("post", "/addReader", params);

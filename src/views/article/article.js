@@ -16,7 +16,7 @@ export default {
   },
 
   computed: {
-    ...mapState("articleStore", ["bodyHtml", "menuList", "articleData", "commnetList", "load", "clickLike","pageTotal", "pageIndex",]),
+    ...mapState("articleStore", ["bodyHtml", "menuList", "articleData", "commnetList", "load", "clickLike","pageTotal", "pageIndex","replyGuest"]),
 
     // 初始化时间
     createdTime() {
@@ -29,7 +29,7 @@ export default {
   methods: {
     ...mapActions("articleStore", ["getArticle", "likeArticle", "getComment","addComment","handlePage"]),
     ...mapActions("loginStore", ["getCookie"]),
-    ...mapMutations("articleStore", ["setClickLike"]),
+    ...mapMutations("articleStore", ["setClickLike","setReplyInfo"]),
     // 页面滚动
     bodyScroll() {
       clearTimeout(this.timer);

@@ -1,7 +1,7 @@
 const router = require("koa-router")();
 const article = require("../models/article");
 const comment = require("../models/comment");
-const blogger = require("../models/comment");
+const blogger = require("../models/blogger");
 
 // 获取文章
 router.get("/getArticle", async (ctx) => {
@@ -27,7 +27,6 @@ router.post("/addArticle", async (ctx) => {
   const { id, content, title } = ctx.request.body;
   await article.findOne({ id }).then((result) => {
     if (!result) {
-      console.log(1111);
       new article({
         id,
         title,
@@ -82,6 +81,7 @@ router.post("/likeArticle", async (ctx) => {
       };
     }
   });
+  await blogger.updateOne({ $inc: { like: 1 / 2 } });
 });
 
 // 获取评论
@@ -112,16 +112,27 @@ router.get("/getComment", async (ctx) => {
 
 // 新增评论
 router.post("/addComment", async (ctx) => {
-  const { articleId, guestName, commentText } = ctx.request.body;
+  const { articleId, guestName, commentText, replyGuest, replyText } = ctx.request.body;
   await new comment({
     articleId,
     guestName,
     commentText,
+    replyGuest,
+    replyText,
   }).save();
-  ctx.body = {
-    code: 200,
-    msg: "评论成功",
-    success: true,
-  };
+  await article.updateOne({ id: articleId }, { $inc: { commentNum: 1 / 2 } });
+  if (!replyGuest) {
+    ctx.body = {
+      code: 200,
+      msg: "评论成功",
+      success: true,
+    };
+  } else {
+    ctx.body = {
+      code: 200,
+      msg: "回复成功",
+      success: true,
+    };
+  }
 });
 module.exports = router;

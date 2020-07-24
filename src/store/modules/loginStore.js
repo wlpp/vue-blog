@@ -1,3 +1,6 @@
+import homeApi from "@/api/homeApi";
+import Vue from "vue";
+
 export default {
   namespaced: true, //添加后该模块的getters,mutations，actions将不再全局调用
   state: {
@@ -29,16 +32,27 @@ export default {
       dispatch("getCookie");
     },
     getCookie({ state }) {
-      console.log(111);
-      var cookieArr = document.cookie.split(";");
-      for (var i = 0; i < cookieArr.length; i++) {
-        var arr = cookieArr[i].split("=");
-        if (arr[0] === "USER_INFO") {
+      let cookieArr = document.cookie.split(";");
+      cookieArr.map((item, index) => {
+        let arr = cookieArr[index].split("=");
+        if (arr[0].trim() == "USER_INFO") {
           state.userInfo = arr[1];
           state.isRead = true;
         }
-        return;
-      }
+      });
+    },
+    async updateRead({ state }, readInfo) {
+      homeApi
+        .updateRead(readInfo)
+        .then((res) => {
+          if (res.data.success) {
+            state.loginPopup = false;
+            Vue.prototype.$message(res.data.msg);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

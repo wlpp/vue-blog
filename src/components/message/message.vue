@@ -46,7 +46,7 @@ export default {
   flex-wrap: wrap;
   font-size: 14px;
   color: #fff;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
