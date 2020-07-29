@@ -1,5 +1,4 @@
 import articleApi from "@/api/articleApi";
-import marked from "marked";
 import Vue from "vue";
 export default {
   namespaced: true,
@@ -17,6 +16,8 @@ export default {
     pageTotal: 0,
     replyGuest: "",
     replyText: "",
+    isEdit: false,
+    disabled: true,
   },
   getters: {},
   mutations: {
@@ -25,6 +26,11 @@ export default {
         state.likeInfo = JSON.parse(localStorage.getItem("likeInfo"));
         state.likeInfo.includes(state.paramsId) && (state.clickLike = true);
       }
+    },
+    // 编辑模式
+    enterEdit(state) {
+      const edit = location.hash.slice(location.hash.indexOf("?") + 1);
+      edit === "edit" && state.disabled ? (state.isEdit = true) : (state.isEdit = false);
     },
     setClickLike(state) {
       state.clickLike = false;
@@ -35,15 +41,14 @@ export default {
     },
   },
   actions: {
-    // 存储markdown数据
-    saveArticle(state, content) {
+    // 保存文章
+    saveArticle({ state }, content) {
       const params = {
-        id: 10,
+        id: state.paramsId,
         title: "娃哈哈",
         content,
       };
-      // articleApi.addArticle(params).then((res) => console.log(res));
-      articleApi.updateArticle(params).then((res) => console.log(res));
+      articleApi.updateArticle(params).then((res) => console.log(res.data.msg));
     },
     // 获取文章信息
     getArticle({ state, commit }, id) {
@@ -54,18 +59,27 @@ export default {
         .getArticle({ id })
         .then((res) => {
           state.load = false;
-          if (res.data.code === 200 && res.data.data.content) {
-            state.bodyHtml = marked(res.data.data.content);
+          if (res.data.code === 200) {
+            state.bodyHtml = res.data.data.content;
             state.articleData = res.data.data;
-            Vue.prototype.$nextTick(() => {
-              state.menuList = [];
-              document
-                .querySelectorAll(".markdown-body h1")
-                .forEach((item) => state.menuList.push({ menuText: item.id, offsetTop: item.offsetTop }));
-            });
+            state.menuList = [];
+            setTimeout(() => {
+              Vue.prototype.$nextTick(() => {
+                document.querySelectorAll(".mce-content-body h2").forEach((item, index) => {
+                  item.setAttribute("id", "menu_" + index);
+                  state.menuList.push({ menuId: "menu_" + index, menuText: item.innerText, offsetTop: item.offsetTop });
+                });
+              });
+            }, 300);
           } else {
             state.bodyHtml = "";
           }
+        })
+        .then(() => {
+          setTimeout(() => {
+            sessionStorage.getItem("disabled") !== null && (state.disabled = false);
+            commit("enterEdit");
+          }, 500);
         })
         .catch((err) => {
           state.load = false;
@@ -164,6 +178,23 @@ export default {
           break;
       }
       dispatch("getComment");
+    },
+    // 验证编辑
+    verifyEdit({ state }, editVal) {
+      if (editVal === "") {
+        return;
+      }
+      articleApi.verifyEdit({ editVal }).then((res) => {
+        if (res.data.data) {
+          Vue.prototype.$message("验证成功");
+          state.disabled = false;
+          state.isEdit = false;
+          sessionStorage.setItem("disabled", false);
+        } else {
+          Vue.prototype.$message("验证失败");
+          state.disabled = true;
+        }
+      });
     },
   },
 };

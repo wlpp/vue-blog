@@ -2,14 +2,14 @@
   <div class="article">
     <div class="article_content">
       <div class="article_title">{{ articleData && articleData.title }}</div>
-      <div class="article_meta">
+      <!-- 文章内容 -->
+      <tinymce ref="editor" :value="bodyHtml" :disabled="disabled" />
+      <div class="article_meta"  v-if="articleData.content">
         <span>发表时间:{{ createdTime }}</span>
         <span>更新时间:{{ updatedTime }}</span>
       </div>
-      <!-- 文章内容 -->
-      <div v-highlight class="markdown-body" v-html="bodyHtml"></div>
       <!-- 文章评论 -->
-      <div class="article_comment" id="article_comment">
+      <div class="article_comment" id="article_comment" v-if="articleData.content">
         <div class="article_comment--title">Hi~</div>
         <div class="article_comment--action">
           <transition name="flipX">
@@ -30,7 +30,9 @@
                 <span>{{ index + 1 }}楼</span>
               </p>
               <p class="time">{{ item.createTime }}</p>
-              <div class="replyto" v-if="item.replyGuest !== ''">@{{item.replyGuest}}: <span>{{item.replyText}}</span></div>
+              <div class="replyto" v-if="item.replyGuest !== ''">
+                @{{ item.replyGuest }}: <span>{{ item.replyText }}</span>
+              </div>
               <div class="detail">{{ item.commentText }}</div>
               <div class="control" @click="setReplyInfo({ replyGuest: item.guestName, replyText: item.commentText })">
                 <i class="iconfont iconpinglun"></i>
@@ -57,15 +59,15 @@
       </div>
     </div>
     <!-- 文章目录 -->
-    <div class="article_menubox" ref="menubox">
+    <div class="article_menubox" ref="menubox"  v-if="articleData.content">
       <div class="article_menu">
         <div class="article_menu--title">目录</div>
         <div
           class="article_menu--item"
           v-for="(item, index) in menuList"
-          :class="item.menuText == menuText && 'act_item'"
+          :class="item.menuId == menuId && 'act_item'"
           :key="index"
-          @click="scrollAppoint(item.menuText)"
+          @click="scrollAppoint(item.menuId)"
         >
           {{ item.menuText }}
         </div>
@@ -95,11 +97,15 @@
     <go-top :show="show" />
     <!-- 加载 -->
     <Load v-if="load" />
+    <!-- 编辑 -->
+    <div class="edit-popup" v-if="isEdit">
+      <input type="text" placeholder="请输入指令进入编辑模式" v-model="editVal" />
+    </div>
   </div>
 </template>
 
 <script src="./article.js"></script>
 <style lang="less">
 @import url("./article.less");
-@import url("../../assets/css/markdown.less");
+@import url("../../assets/css/prism.css");
 </style>

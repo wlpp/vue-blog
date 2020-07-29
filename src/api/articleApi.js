@@ -18,4 +18,7 @@ export default {
   addComment: async (params) => {
     return request("post", "/addComment", params);
   },
+  verifyEdit: async (params) => {
+    return request("get", "/verifyEdit", params);
+  },
 };

@@ -1,4 +1,3 @@
-import Vue from "vue";
 import homeApi from "@/api/homeApi";
 import path from "@/helpers/path";
 
@@ -68,8 +67,7 @@ export default {
         });
     },
     // 博主信息
-    getBlogger({state}) {
-    console.log(11111111111);
+    getBlogger({ state }) {
       homeApi
         .getBlogger()
         .then((res) => {
@@ -106,7 +104,6 @@ export default {
           state.pageIndex < state.pageTotal && state.pageIndex++;
           break;
       }
-      console.log(Vue.prototype);
       dispatch("getArchive");
     },
   },

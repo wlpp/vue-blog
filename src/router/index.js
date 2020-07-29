@@ -19,11 +19,6 @@ const routes = [
     name: "Article",
     component: () => import(/* webpackChunkName: "article" */ "../views/article/article.vue"),
   },
-  {
-    path: "/write",
-    name: "Write",
-    component: () => import(/* webpackChunkName: "write" */ "../views/write/write.vue"),
-  },
 ];
 
 const router = new VueRouter({

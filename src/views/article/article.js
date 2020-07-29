@@ -1,35 +1,66 @@
 import { mapState, mapActions, mapMutations } from "vuex";
 import goTop from "@/components/goTop/goTop";
 import Load from "@/components/load/load";
+import tinymce from "@/components/tinymce/tinymce";
 export default {
   components: {
     goTop,
     Load,
+    tinymce,
   },
   data() {
     return {
-      menuText: "",
+      menuId: "",
       show: false,
       timer: false,
-      commentText:''
+      commentText: "",
+      value: "",
+      editVal: "",
     };
   },
 
   computed: {
-    ...mapState("articleStore", ["bodyHtml", "menuList", "articleData", "commnetList", "load", "clickLike","pageTotal", "pageIndex","replyGuest"]),
-
+    ...mapState("articleStore", [
+      "bodyHtml",
+      "menuList",
+      "articleData",
+      "commnetList",
+      "load",
+      "clickLike",
+      "pageTotal",
+      "pageIndex",
+      "replyGuest",
+      "isEdit",
+      "disabled",
+    ]),
     // 初始化时间
     createdTime() {
-      return this.articleData.created && this.articleData.created.slice(0, this.articleData.created.indexOf("T"));
+      return this.articleData.createTime && this.articleData.createTime.slice(0, this.articleData.createTime.indexOf("T"));
     },
     updatedTime() {
-      return this.articleData.updated && this.articleData.updated.slice(0, this.articleData.created.indexOf("T"));
+      return this.articleData.updateTime && this.articleData.updateTime.slice(0, this.articleData.updateTime.indexOf("T"));
+    },
+  },
+  watch: {
+    editVal(newVal) {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.editVal = newVal;
+        this.verifyEdit(this.editVal);
+      }, 500);
     },
   },
   methods: {
-    ...mapActions("articleStore", ["getArticle", "likeArticle", "getComment","addComment","handlePage"]),
+    ...mapActions("articleStore", [
+      "getArticle",
+      "likeArticle",
+      "getComment",
+      "addComment",
+      "handlePage",
+      "verifyEdit",
+    ]),
     ...mapActions("loginStore", ["getCookie"]),
-    ...mapMutations("articleStore", ["setClickLike","setReplyInfo"]),
+    ...mapMutations("articleStore", ["setClickLike", "setReplyInfo", "enterEdit"]),
     // 页面滚动
     bodyScroll() {
       clearTimeout(this.timer);
@@ -37,14 +68,14 @@ export default {
         this.$nextTick(() => {
           const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
           scrollTop >= 1200 ? (this.show = true) : (this.show = false);
-          scrollTop <= 0 && (this.menuText = "");
+          scrollTop <= 0 && (this.menuId = "");
           if (scrollTop >= this.menuList[this.menuList.length - 1].offsetTop) {
-            this.menuText = this.menuList[this.menuList.length - 1].menuText;
+            this.menuId = this.menuList[this.menuList.length - 1].menuId;
           } else {
             this.menuList.map((item, index) => {
               scrollTop >= this.menuList[index].offsetTop &&
                 scrollTop <= this.menuList[index + 1].offsetTop &&
-                (this.menuText = item.menuText);
+                (this.menuId = item.menuId);
             });
           }
         });
@@ -54,7 +85,7 @@ export default {
     // 滚动指定位置
     scrollAppoint(element) {
       document.querySelector(`#${element}`).scrollIntoView({ behavior: "smooth" });
-      this.menuText = element;
+      this.menuId = element;
     },
   },
   mounted() {

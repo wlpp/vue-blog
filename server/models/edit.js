@@ -1,12 +1,8 @@
 const mongoose = require("mongoose");
 
-const bloggerSchema = new mongoose.Schema(
+const editSchema = new mongoose.Schema(
   {
-    name: String,
-    like: Number,
-    article: Number,
-    read: Number,
-    edit: Boolean,
+    editVal: String,
   },
   {
     // 获取数据创建/更新时间
@@ -18,4 +14,4 @@ const bloggerSchema = new mongoose.Schema(
 );
 
 // blogger 为表名称
-module.exports = mongoose.model("blogger", bloggerSchema, "blogger");
+module.exports = mongoose.model("edit", editSchema, "edit");
