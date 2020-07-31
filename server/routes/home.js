@@ -11,8 +11,17 @@ router.get("/archive", async (ctx) => {
   const title = eval("/^.*" + ctx.query.title + ".*$/");
   const pageIndex = ctx.query.pageIndex;
   const pageSize = ctx.query.pageSize;
+  // await archive.find((err, Data) => {
+  //   console.log(err);
+  //   console.log(Data);
+  //       ctx.body = {
+  //       Code: 200,
+  //       message: "success",
+  //       Data,
+  //     };
+  // })
   await archive
-    .find({ tagNames, title })
+    .find({ tagNames,title })
     .skip((pageIndex - 1) * pageSize)
     .limit(pageIndex * pageSize)
     .then((Data) => {

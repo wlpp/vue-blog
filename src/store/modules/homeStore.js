@@ -19,14 +19,13 @@ export default {
   mutations: {
     // 初始文章数据
     initArchive(state, arr) {
-      arr = arr.map((item) => {
+      state.archive = arr.map((item) => {
         return {
           ...item,
           tagNames: item.tagNames.split(","),
         };
       });
-      state.archive = arr;
-    },
+    },  
 
     // 去文章页
     goArticle(state, id) {
@@ -42,6 +41,7 @@ export default {
         pageIndex: state.pageIndex,
         pageSize: state.pageSize,
       };
+      console.log(params);
       homeApi
         .getArchive(params)
         .then((res) => {
@@ -71,7 +71,6 @@ export default {
       homeApi
         .getBlogger()
         .then((res) => {
-          console.log(res);
           if (res.data.code === 200) {
             state.blogger = res.data.Data[0];
             state.pageTotal = res.data.Data[0].article > 1 ? Math.ceil(res.data.Data[0].article / state.pageSize) : 1;

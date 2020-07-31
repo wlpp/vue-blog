@@ -16,8 +16,11 @@ export default {
     pageTotal: 0,
     replyGuest: "",
     replyText: "",
-    isEdit: false,
+    showEdit: false,
+    showUpload: false,
     disabled: true,
+    title: "",
+    tagNames: "",
   },
   getters: {},
   mutations: {
@@ -30,25 +33,52 @@ export default {
     // 编辑模式
     enterEdit(state) {
       const edit = location.hash.slice(location.hash.indexOf("?") + 1);
-      edit === "edit" && state.disabled ? (state.isEdit = true) : (state.isEdit = false);
+      edit === "edit" && state.disabled ? (state.showEdit = true) : (state.showEdit = false);
     },
     setClickLike(state) {
       state.clickLike = false;
+    },
+    setShowUpload(state) {
+      state.showUpload = !state.showUpload;
     },
     setReplyInfo(state, reply) {
       state.replyGuest = reply.replyGuest;
       state.replyText = reply.replyText;
     },
+    setUploadValue(state, payload) {
+      switch (payload.type) {
+        case 0:
+          state.title = payload.e.target.value;
+          break;
+        case 1:
+          state.tagNames = payload.e.target.value;
+          break;
+      }
+    },
   },
   actions: {
-    // 保存文章
-    saveArticle({ state }, content) {
+    // 上传文章
+    uploadArticle({ state }) {
+      const content = localStorage.getItem("article");
+      if (state.title === "") {
+        Vue.prototype.$message("标题不能为空");
+        return;
+      }
+      if (state.tagNames === "") {
+        Vue.prototype.$message("标签不能为空");
+        return;
+      }
       const params = {
         id: state.paramsId,
-        title: "娃哈哈",
+        title: state.title,
+        tagNames: state.tagNames,
         content,
       };
-      articleApi.updateArticle(params).then((res) => console.log(res.data.msg));
+      articleApi.updateArticle(params).then((res) => {
+        Vue.prototype.$message(res.data.msg);
+        state.showUpload = false;
+        // location.reload();
+      });
     },
     // 获取文章信息
     getArticle({ state, commit }, id) {
@@ -62,6 +92,8 @@ export default {
           if (res.data.code === 200) {
             state.bodyHtml = res.data.data.content;
             state.articleData = res.data.data;
+            state.title = res.data.data.title;
+            state.tagNames = res.data.data.tagNames;
             state.menuList = [];
             setTimeout(() => {
               Vue.prototype.$nextTick(() => {
@@ -188,7 +220,7 @@ export default {
         if (res.data.data) {
           Vue.prototype.$message("验证成功");
           state.disabled = false;
-          state.isEdit = false;
+          state.showEdit = false;
           sessionStorage.setItem("disabled", false);
         } else {
           Vue.prototype.$message("验证失败");

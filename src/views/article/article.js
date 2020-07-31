@@ -30,15 +30,22 @@ export default {
       "pageTotal",
       "pageIndex",
       "replyGuest",
-      "isEdit",
+      "showEdit",
+      "showUpload",
       "disabled",
+      "title",
+      "tagNames"
     ]),
     // 初始化时间
     createdTime() {
-      return this.articleData.createTime && this.articleData.createTime.slice(0, this.articleData.createTime.indexOf("T"));
+      return (
+        this.articleData.createTime && this.articleData.createTime.slice(0, this.articleData.createTime.indexOf("T"))
+      );
     },
     updatedTime() {
-      return this.articleData.updateTime && this.articleData.updateTime.slice(0, this.articleData.updateTime.indexOf("T"));
+      return (
+        this.articleData.updateTime && this.articleData.updateTime.slice(0, this.articleData.updateTime.indexOf("T"))
+      );
     },
   },
   watch: {
@@ -58,9 +65,10 @@ export default {
       "addComment",
       "handlePage",
       "verifyEdit",
+      "uploadArticle",
     ]),
     ...mapActions("loginStore", ["getCookie"]),
-    ...mapMutations("articleStore", ["setClickLike", "setReplyInfo", "enterEdit"]),
+    ...mapMutations("articleStore", ["setClickLike", "setReplyInfo", "enterEdit", "setShowUpload", "setUploadValue"]),
     // 页面滚动
     bodyScroll() {
       clearTimeout(this.timer);

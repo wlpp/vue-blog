@@ -3,6 +3,7 @@ const article = require("../models/article");
 const comment = require("../models/comment");
 const blogger = require("../models/blogger");
 const edit = require("../models/edit");
+const archive = require("../models/archive");
 
 // 获取文章
 router.get("/getArticle", async (ctx) => {
@@ -23,36 +24,15 @@ router.get("/getArticle", async (ctx) => {
   });
 });
 
-// 新增文章
-router.post("/addArticle", async (ctx) => {
-  const { id, content, title } = ctx.request.body;
-  await article.findOne({ id }).then((result) => {
-    if (!result) {
-      new article({
-        id,
-        title,
-        content,
-        commentNum: 0,
-        likeNum: 0,
-      }).save();
-      ctx.body = {
-        code: 200,
-        success: true,
-        msg: "新增文章成功",
-      };
-    }
-  });
-});
 // 更新文章
 router.post("/updateArticle", async (ctx) => {
-  const { id, content, title } = ctx.request.body;
-
+  const { id, content, title, tagNames } = ctx.request.body;
   await article.updateMany({ id }, { title, content }, { multi: true }, (err, res) => {
     if (res.n != 0 && res.nModified != 0) {
       ctx.body = {
         code: 200,
         success: true,
-        msg: "保存成功",
+        msg: "更新成功",
       };
     } else {
       new article({
@@ -61,6 +41,16 @@ router.post("/updateArticle", async (ctx) => {
         content,
         commentNum: 0,
         likeNum: 0,
+        tagNames,
+      }).save();
+      console.log(id, title, tagNames);
+      new archive({
+        id,
+        title,
+        commentNum: 0,
+        likeNum: 0,
+        readNum: 0,
+        tagNames,
       }).save();
       ctx.body = {
         code: 404,
@@ -81,7 +71,6 @@ router.post("/likeArticle", async (ctx) => {
         success: true,
         msg: "点赞成功",
       };
-      // blogger.updateOne({ $inc: { read: 1 / 2 } })
     } else {
       ctx.body = {
         code: 404,
@@ -90,7 +79,7 @@ router.post("/likeArticle", async (ctx) => {
       };
     }
   });
-  await blogger.updateOne({ $inc: { like: 1 / 2 } });
+  await blogger.updateOne({ $inc: { like: 1 } });
 });
 
 // 获取评论

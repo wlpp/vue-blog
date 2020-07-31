@@ -2,12 +2,12 @@
   <div class="article">
     <div class="article_content">
       <div class="article_title">{{ articleData && articleData.title }}</div>
-      <!-- 文章内容 -->
-      <tinymce ref="editor" :value="bodyHtml" :disabled="disabled" />
-      <div class="article_meta"  v-if="articleData.content">
+      <div class="article_meta" v-if="articleData.content">
         <span>发表时间:{{ createdTime }}</span>
         <span>更新时间:{{ updatedTime }}</span>
       </div>
+      <!-- 文章内容 -->
+      <tinymce ref="editor" :value="bodyHtml" :disabled="disabled" />
       <!-- 文章评论 -->
       <div class="article_comment" id="article_comment" v-if="articleData.content">
         <div class="article_comment--title">Hi~</div>
@@ -59,7 +59,7 @@
       </div>
     </div>
     <!-- 文章目录 -->
-    <div class="article_menubox" ref="menubox"  v-if="articleData.content">
+    <div class="article_menubox" ref="menubox" v-if="articleData.content">
       <div class="article_menu">
         <div class="article_menu--title">目录</div>
         <div
@@ -92,14 +92,29 @@
       >
         <i class="iconfont iconpinglun"></i>
       </div>
+      <div
+        class="article_suspended--item up"
+        :class="showUpload && 'act_suspended'"
+        @click="setShowUpload"
+        v-if="!disabled"
+      >
+        <i class="iconfont iconupload"></i>
+      </div>
     </div>
     <!-- 返回顶部 -->
     <go-top :show="show" />
     <!-- 加载 -->
     <Load v-if="load" />
     <!-- 编辑 -->
-    <div class="edit-popup" v-if="isEdit">
-      <input type="text" placeholder="请输入指令进入编辑模式" v-model="editVal" />
+    <div class="edit-popup" v-if="showEdit">
+      <input type="text" placeholder="指令进入编辑模式" v-model="editVal" />
+    </div>
+    <div class="upload-popup" v-if="showUpload">
+      <input type="text" placeholder="文章标题" :value="title" @input="setUploadValue({ type: 0, e: $event })" />
+      <input type="text" placeholder="文章标签" :value="tagNames" @input="setUploadValue({ type: 1, e: $event })" />
+      <div class="upload-btn" @click="uploadArticle">
+        上传
+      </div>
     </div>
   </div>
 </template>

@@ -7,7 +7,6 @@
 <script>
 import tinymce from "tinymce/tinymce"; //tinymce默认hidden，不引入不显示
 import Editor from "@tinymce/tinymce-vue";
-import { mapActions } from "vuex";
 import "tinymce/themes/silver";
 // 编辑器插件plugins
 // 更多插件参考：https://www.tiny.cloud/docs/plugins/
@@ -44,7 +43,6 @@ export default {
       default:
         // " undo redo |  formatselect | bold italic forecolor  backcolor codesample save| alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image media table | removeformat   ",
         "  h1 h2 h3 codesample| bold italic forecolor save| alignleft aligncenter | bullist numlist | lists image table",
-
     },
   },
   data() {
@@ -69,7 +67,8 @@ export default {
         ],
         // 保存
         save_onsavecallback: (e) => {
-          this.saveArticle(e.bodyElement.innerHTML);
+          localStorage.setItem("article", e.bodyElement.innerHTML);
+          console.log("保存成功");
         },
         // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
         // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
@@ -88,7 +87,6 @@ export default {
   methods: {
     // 添加相关的事件，可用的事件参照文档=> https://github.com/tinymce/tinymce-vue => All available events
     // 需要什么事件可以自己增加
-    ...mapActions("articleStore", ["saveArticle"]),
     onClick(e) {
       this.$emit("onClick", e, tinymce);
     },

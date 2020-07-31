@@ -14,8 +14,7 @@
     }
 
     &_meta {
-        text-align: right;
-        margin-top: 30px;
+        margin-bottom: 30px;
 
         span {
             font-size: 14px;
@@ -30,7 +29,7 @@
         width: 643px;
         border-left: 1px solid #efefef;
         border-right: 1px solid #efefef;
-        padding: 0 20px 30px;
+        padding: 30px 20px 30px;
 
     }
 
@@ -357,13 +356,19 @@
             .iconpinglun {
                 font-size: 19px;
             }
-
+            .iconupload {
+                font-size: 20px;
+            }
             &:hover {
                 .act_suspended;
             }
 
         }
-
+        .up{
+            &::after{
+                display: none;
+            }
+        }
         .act_suspended {
             border-color: #0bb6eb;
 
@@ -389,13 +394,6 @@
         box-shadow: 6px 5px 12px 0px #999;
         background-color: #fff;
 
-        .title {
-            font-size: 15px;
-            color: #a74242;
-            padding-top: 20px;
-            text-align: center;
-        }
-
         input {
             // border: 2px solid #0bb6eb ;
             display: block;
@@ -405,10 +403,72 @@
             border: none;
             outline: none;
             border-radius: 8px;
+            text-align: center;
 
             &::placeholder {
+                text-align: center;
                 color: #e45454;
             }
         }
+    }
+
+    .upload-popup {
+        width: 168px;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 8px;
+        box-shadow: 6px 5px 12px 0px #999;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 10px 0;
+        box-sizing: border-box;
+
+        input {
+            flex: 1;
+            // border: 2px solid #0bb6eb ;
+            display: block;
+            width: 100%;
+            padding: 0 10px;
+            border: none;
+            outline: none;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+            &::placeholder {
+                text-align: center;
+            }
+        }
+
+
+        .upload-btn {
+            flex-shrink: 0;
+            width: 90%;
+            height: 32px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #fff;
+            cursor: pointer;
+            margin-right: 5px;
+            background-color: tomato;
+
+            &:last-of-type {
+                margin-right: 0;
+            }
+
+            &:hover {
+                opacity: .9;
+            }
+        }
+
     }
 }
