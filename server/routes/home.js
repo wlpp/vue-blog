@@ -11,15 +11,22 @@ router.get("/archive", async (ctx) => {
   const title = eval("/^.*" + ctx.query.title + ".*$/");
   const pageIndex = ctx.query.pageIndex;
   const pageSize = ctx.query.pageSize;
-  await archive
-    .find({ tagNames,title })
+  // // 获取页码数
+  await archive.find({ tagNames, title }, (err, Data2) => {
+    if (!err) {
+      pageTotal = Data2.length > pageSize ? Math.ceil(Data2.length / pageSize) : 1;
+    }
+  });
+  await archive 
+    .find({ tagNames, title })
     .skip((pageIndex - 1) * pageSize)
-    .limit(pageIndex * pageSize)
+    .limit(parseInt(pageSize))
     .then((Data) => {
       ctx.body = {
         Code: 200,
         message: "success",
         Data,
+        pageTotal,
       };
     });
 });

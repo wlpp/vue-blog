@@ -46,6 +46,7 @@ export default {
         .then((res) => {
           if (res.data.Code === 200) {
             commit("initArchive", res.data.Data);
+            state.pageTotal = res.data.pageTotal;
           }
         })
         .catch((err) => {
@@ -72,7 +73,6 @@ export default {
         .then((res) => {
           if (res.data.code === 200) {
             state.blogger = res.data.Data[0];
-            state.pageTotal = res.data.Data[0].article > 1 ? Math.ceil(res.data.Data[0].article / state.pageSize) : 1;
           }
         })
         .catch((err) => {
@@ -103,13 +103,18 @@ export default {
       }
       switch (type) {
         case 0:
-          state.pageIndex > 1 && state.pageIndex--;
+          if (state.pageIndex > 1) {
+            state.pageIndex--;
+            dispatch("getArchive");
+          }
           break;
         case 1:
-          state.pageIndex < state.pageTotal && state.pageIndex++;
+          if (state.pageIndex < state.pageTotal) {
+            state.pageIndex++;
+            dispatch("getArchive");
+          }
           break;
       }
-      dispatch("getArchive");
     },
   },
 };

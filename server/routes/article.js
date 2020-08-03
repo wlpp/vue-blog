@@ -88,7 +88,7 @@ router.get("/getComment", async (ctx) => {
   const pageIndex = ctx.query.pageIndex;
   const pageSize = ctx.query.pageSize;
   let pageTotal = 0;
-  // 获取总数量
+  // 获取页码数
   await comment.find({ articleId }, (err, Data2) => {
     if (!err) {
       pageTotal = Data2.length > pageSize ? Math.ceil(Data2.length / pageSize) : 1;
@@ -97,7 +97,7 @@ router.get("/getComment", async (ctx) => {
   await comment
     .find({ articleId })
     .skip((pageIndex - 1) * pageSize)
-    .limit(pageIndex * pageSize)
+    .limit(parseInt(pageSize))
     .then((data) => {
       ctx.body = {
         code: 200,
