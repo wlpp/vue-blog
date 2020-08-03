@@ -18,7 +18,9 @@ export default {
   methods: {
     ...mapMutations("homeStore", ["goArticle"]),
     ...mapActions("loginStore", ["getCookie"]),
-    ...mapActions("homeStore", ["getArchive", "getTags", "handleTag", "handleSearch", "handlePage", "getBlogger"]),
+    ...mapActions("homeStore", ["getArchive", "getTags", "handleTag","handleInput", "handleSearch", "handlePage", "getBlogger"]),
+
+  
   },
   mounted() {
     this.getTags();

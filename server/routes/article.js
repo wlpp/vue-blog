@@ -29,6 +29,7 @@ router.post("/updateArticle", async (ctx) => {
   const { id, content, title, tagNames } = ctx.request.body;
   await article.updateMany({ id }, { title, content }, { multi: true }, (err, res) => {
     if (res.n != 0 && res.nModified != 0) {
+      archive.updateMany({ id }, { title, tagNames }, { multi: true }, (err, res) => {});
       ctx.body = {
         code: 200,
         success: true,
@@ -43,7 +44,6 @@ router.post("/updateArticle", async (ctx) => {
         likeNum: 0,
         tagNames,
       }).save();
-      console.log(id, title, tagNames);
       new archive({
         id,
         title,

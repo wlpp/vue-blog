@@ -51,7 +51,8 @@
             placeholder="输入文章名进行检索..."
             v-model="value"
             @focus="isClick = true"
-            @blur="isClick = false"
+            @blur="isClick = true"
+            @input="handleInput(value)"
             @keyup.enter="handleSearch(value)"
           />
           <i class="iconfont iconsearch" @click="handleSearch(value)"></i>

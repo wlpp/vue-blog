@@ -25,7 +25,7 @@ export default {
           tagNames: item.tagNames.split(","),
         };
       });
-    },  
+    },
 
     // 去文章页
     goArticle(state, id) {
@@ -41,7 +41,6 @@ export default {
         pageIndex: state.pageIndex,
         pageSize: state.pageSize,
       };
-      console.log(params);
       homeApi
         .getArchive(params)
         .then((res) => {
@@ -84,6 +83,13 @@ export default {
     handleTag({ state, dispatch }, name) {
       name !== state.tagNames ? (state.tagNames = name) : (state.tagNames = "");
       dispatch("getArchive");
+    },
+    // 监听输入框
+    handleInput({ state, dispatch }, value) {
+      if (value === "") {
+        state.title = "";
+        dispatch("getArchive");
+      }
     },
     // 点击搜索
     handleSearch({ state, dispatch }, value) {

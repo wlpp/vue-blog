@@ -111,7 +111,7 @@
     </div>
     <div class="upload-popup" v-if="showUpload">
       <input type="text" placeholder="文章标题" :value="title" @input="setUploadValue({ type: 0, e: $event })" />
-      <input type="text" placeholder="文章标签" :value="tagNames" @input="setUploadValue({ type: 1, e: $event })" />
+      <input type="text" placeholder="文章标签" :value="tagNames" @input="setUploadValue({ type: 1, e: $event })"  />
       <div class="upload-btn" @click="uploadArticle">
         上传
       </div>
