@@ -44,19 +44,19 @@ export default {
     ...mapMutations("loginStore", ["setLogin"]),
     // 确定
     handleConfirm() {
-      // const reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
-      // if (this.name === "") {
-      //   this.$message("昵称不能为空");
-      //   return;
-      // }
-      // if (this.email === "") {
-      //   this.$message("邮箱不能为空");
-      //   return;
-      // }
-      // if (!reg.test(this.email)) {
-      //   this.$message("邮箱格式不正确");
-      //   return;
-      // }
+      const reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+      if (this.name === "") {
+        this.$message("昵称不能为空");
+        return;
+      }
+      if (this.email === "") {
+        this.$message("邮箱不能为空");
+        return;
+      }
+      if (!reg.test(this.email)) {
+        this.$message("邮箱格式不正确");
+        return;
+      }
       this.setCookie({ key: "USER_INFO", value: JSON.stringify({ name: this.name, email: this.email }), hours: 1 });
       this.updateRead({ name: this.name, email: this.email }).then(() => {
         this.$route.name === "home" && this.getBlogger;
