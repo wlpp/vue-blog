@@ -5,7 +5,7 @@ const archiveSchema = new mongoose.Schema(
   {
     id: Number,
     title: String,
-    commentNum: String,
+    commentNum: Number,
     likeNum: Number,
     readNum: Number,
     tagNames: String,

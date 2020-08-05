@@ -58,13 +58,13 @@ export default {
   },
   actions: {
     // 上传文章
-    uploadArticle({ state }) {
-      const content = localStorage.getItem("article");
-      if (state.title === "") {
+    uploadArticle({ state, dispatch }) {
+      const content = sessionStorage.getItem(state.paramsId);
+      if (!state.title || state.title === "") {
         Vue.prototype.$message("标题不能为空");
         return;
       }
-      if (state.tagNames === "") {
+      if (!state.tagNames || state.tagNames === "") {
         Vue.prototype.$message("标签不能为空");
         return;
       }
@@ -77,7 +77,7 @@ export default {
       articleApi.updateArticle(params).then((res) => {
         Vue.prototype.$message(res.data.msg);
         state.showUpload = false;
-        // location.reload();
+        dispatch("getArticle", state.paramsId);
       });
     },
     // 获取文章信息
@@ -95,23 +95,26 @@ export default {
             state.title = res.data.data.title;
             state.tagNames = res.data.data.tagNames;
             state.menuList = [];
-            setTimeout(() => {
-              Vue.prototype.$nextTick(() => {
-                document.querySelectorAll(".mce-content-body h2").forEach((item, index) => {
-                  item.setAttribute("id", "menu_" + index);
-                  state.menuList.push({ menuId: "menu_" + index, menuText: item.innerText, offsetTop: item.offsetTop });
-                });
-              });
-            }, 300);
           } else {
             state.bodyHtml = "";
           }
         })
         .then(() => {
-          setTimeout(() => {
+          const timer = setTimeout(() => {
+            // 获取目录
+            Vue.prototype.$nextTick(() => {
+              document.querySelectorAll(".mce-content-body h2").forEach((item, index) => {
+                item.setAttribute("id", "menu_" + index);
+                state.menuList.push({ menuId: "menu_" + index, menuText: item.innerText, offsetTop: item.offsetTop });
+              });
+            });
+
+            // 设置编辑模式
             sessionStorage.getItem("disabled") !== null && (state.disabled = false);
             commit("enterEdit");
-          }, 500);
+            (!state.disabled && sessionStorage.getItem(state.paramsId)) && (state.bodyHtml = sessionStorage.getItem(state.paramsId));
+            clearTimeout(timer)
+          }, 300);
         })
         .catch((err) => {
           state.load = false;
@@ -135,7 +138,6 @@ export default {
           console.log(err, "likeArticle");
         });
     },
-    // 获取文章评论
     getComment({ state }) {
       const params = {
         articleId: state.paramsId,
@@ -222,6 +224,7 @@ export default {
           state.disabled = false;
           state.showEdit = false;
           sessionStorage.setItem("disabled", false);
+          location.reload()
         } else {
           Vue.prototype.$message("验证失败");
           state.disabled = true;

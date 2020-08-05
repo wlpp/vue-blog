@@ -61,13 +61,13 @@ export default {
         menubar: false,
         // 设置代码内容
         codesample_languages: [
-          { text: "HTML", value: "markup" },
           { text: "JavaScript", value: "javascript" },
+          { text: "HTML", value: "markup" },
           { text: "CSS", value: "css" },
         ],
         // 保存
         save_onsavecallback: (e) => {
-          localStorage.setItem("article", e.bodyElement.innerHTML);
+          sessionStorage.setItem(this.$route.params.id, e.bodyElement.innerHTML);
           console.log("保存成功");
         },
         // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，

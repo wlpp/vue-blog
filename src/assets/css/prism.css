@@ -2,7 +2,9 @@
 	cursor: default !important;
 	outline: none !important;
 }
-
+.mce-content-body h2,.mce-content-body h3 {
+	/* border: none !important; */
+}
 .mce-content-body ul li {
 	list-style: disc;
 	/* position: relative; */

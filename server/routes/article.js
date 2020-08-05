@@ -4,6 +4,7 @@ const comment = require("../models/comment");
 const blogger = require("../models/blogger");
 const edit = require("../models/edit");
 const archive = require("../models/archive");
+const tags = require("../models/tags");
 
 // 获取文章
 router.get("/getArticle", async (ctx) => {
@@ -27,38 +28,54 @@ router.get("/getArticle", async (ctx) => {
 // 更新文章
 router.post("/updateArticle", async (ctx) => {
   const { id, content, title, tagNames } = ctx.request.body;
-  await article.updateMany({ id }, { title, content }, { multi: true }, (err, res) => {
-    if (res.n != 0 && res.nModified != 0) {
-      archive.updateMany({ id }, { title, tagNames }, { multi: true }, (err, res) => {});
-      ctx.body = {
-        code: 200,
-        success: true,
-        msg: "更新成功",
-      };
-    } else {
-      new article({
-        id,
-        title,
-        content,
-        commentNum: 0,
-        likeNum: 0,
-        tagNames,
-      }).save();
-      new archive({
-        id,
-        title,
-        commentNum: 0,
-        likeNum: 0,
-        readNum: 0,
-        tagNames,
-      }).save();
-      ctx.body = {
-        code: 404,
-        success: false,
-        msg: "新增成功",
-      };
-    }
-  });
+  await article
+    .updateMany({ id }, { title, content, tagNames }, { multi: true }, (err, res) => {
+      if (res.n != 0 && res.nModified != 0) {
+        archive.updateMany({ id }, { title, tagNames }, { multi: true }, (err, res) => {});
+        ctx.body = {
+          code: 200,
+          success: true,
+          msg: "更新成功",
+        };
+      } else {
+        new article({
+          id,
+          title,
+          content,
+          commentNum: 0,
+          likeNum: 0,
+          tagNames,
+        }).save();
+        new archive({
+          id,
+          title,
+          commentNum: 0,
+          likeNum: 0,
+          readNum: 0,
+          tagNames,
+        }).save();
+        blogger.updateOne({ $inc: { article: 1 } }, () => {});
+        ctx.body = {
+          code: 404,
+          success: false,
+          msg: "新增成功",
+        };
+      }
+    })
+    .then(() => {
+      const tagArr = tagNames.split(",");
+      tags.find((err, data) => {
+        const arr3 = data.map((item) => item.name);
+        tagArr.map((name) => {
+          if (!arr3.includes(name)) {
+            new tags({
+              name,
+              status: true,
+            }).save();
+          }
+        });
+      });
+    });
 });
 
 // 喜欢文章
@@ -80,8 +97,8 @@ router.post("/likeArticle", async (ctx) => {
     }
   });
   await blogger.updateOne({ $inc: { like: 1 } });
+  await archive.updateOne({ id }, { $inc: { likeNum: 1 } });
 });
-
 // 获取评论
 router.get("/getComment", async (ctx) => {
   const articleId = ctx.query.articleId;
@@ -118,7 +135,8 @@ router.post("/addComment", async (ctx) => {
     replyGuest,
     replyText,
   }).save();
-  await article.updateOne({ id: articleId }, { $inc: { commentNum: 1 / 2 } });
+  await article.updateOne({ id: articleId }, { $inc: { commentNum: 1 } });
+  await archive.updateOne({ id: articleId }, { $inc: { commentNum: 1 } });
   if (!replyGuest) {
     ctx.body = {
       code: 200,

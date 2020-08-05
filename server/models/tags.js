@@ -3,9 +3,8 @@ const mongoose = require("mongoose");
 // userSchema为表名称
 const tagsSchema = new mongoose.Schema(
   {
-    cid: Number,
     name: String,
-    stat: Boolean,
+    status: Boolean,
   },
   {
     // 获取数据创建/更新时间

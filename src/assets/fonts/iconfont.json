@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12099658",
+      "name": "时间",
+      "font_class": "huabanfuben",
+      "unicode": "eb7d",
+      "unicode_decimal": 60285
+    },
+    {
+      "icon_id": "12592403",
+      "name": "更新",
+      "font_class": "gengxin",
+      "unicode": "e74b",
+      "unicode_decimal": 59211
+    },
+    {
       "icon_id": "5485649",
       "name": "上传 (1)",
       "font_class": "upload",

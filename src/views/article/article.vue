@@ -3,8 +3,8 @@
     <div class="article_content">
       <div class="article_title">{{ articleData && articleData.title }}</div>
       <div class="article_meta" v-if="articleData.content">
-        <span>发表时间:{{ createdTime }}</span>
-        <span>更新时间:{{ updatedTime }}</span>
+        <span><i class="iconfont iconhuabanfuben"></i>发表时间:{{ createdTime }}</span>
+        <span><i class="iconfont icongengxin"></i>更新时间:{{ updatedTime }}</span>
       </div>
       <!-- 文章内容 -->
       <tinymce ref="editor" :value="bodyHtml" :disabled="disabled" />
@@ -79,7 +79,7 @@
       <div
         class="article_suspended--item"
         :class="clickLike && 'act_suspended'"
-        :badge="articleData && articleData.likeNum"
+        :badge="articleData.likeNum || 0"
         @click="likeArticle"
       >
         <i class="iconfont iconzang"></i>
@@ -87,7 +87,7 @@
       <div
         class="article_suspended--item"
         :class="commnetList.length > 0 && 'act_suspended'"
-        :badge="commnetList && commnetList.length"
+        :badge="commnetList.length || 0"
         @click="scrollAppoint('article_comment')"
       >
         <i class="iconfont iconpinglun"></i>
