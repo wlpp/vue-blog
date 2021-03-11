@@ -22,28 +22,28 @@ import "tinymce/plugins/textpattern"; // 排版插件
 
 export default {
   components: {
-    Editor,
+    Editor
   },
   name: "tinymce",
   props: {
     value: {
       type: String,
-      default: "",
+      default: ""
     },
     disabled: {
       type: Boolean,
-      default: true,
+      default: true
     },
     plugins: {
       type: [String, Array],
-      default: "lists image media table wordcount codesample save ",
+      default: "lists image media table wordcount codesample save textpattern "
     },
     toolbar: {
       type: [String, Array],
       default:
         // " undo redo |  formatselect | bold italic forecolor  backcolor codesample save| alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image media table | removeformat   ",
-        "  h1 h2 h3 codesample| bold italic forecolor save| alignleft aligncenter | bullist numlist | lists image table",
-    },
+        "  h1 h2 h3 codesample| bold italic forecolor save| alignleft aligncenter | bullist numlist | lists image table"
+    }
   },
   data() {
     return {
@@ -63,10 +63,23 @@ export default {
         codesample_languages: [
           { text: "JavaScript", value: "javascript" },
           { text: "HTML", value: "markup" },
-          { text: "CSS", value: "css" },
+          { text: "CSS", value: "css" }
+        ],
+        textpattern_patterns: [
+          { start: "*", end: "*", format: "italic" },
+          { start: "**", end: "**", format: "bold" },
+          { start: "#", format: "h1" },
+          { start: "##", format: "h2" },
+          { start: "###", format: "h3" },
+          { start: "####", format: "h4" },
+          { start: "#####", format: "h5" },
+          { start: "######", format: "h6" },
+          { start: "1. ", cmd: "InsertOrderedList" },
+          { start: "* ", cmd: "InsertUnorderedList" },
+          { start: "- ", cmd: "InsertUnorderedList" }
         ],
         // 保存
-        save_onsavecallback: (e) => {
+        save_onsavecallback: e => {
           sessionStorage.setItem(this.$route.params.id, e.bodyElement.innerHTML);
           console.log("保存成功");
         },
@@ -74,10 +87,11 @@ export default {
         // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
         images_upload_handler: (blobInfo, success) => {
           const img = "data:image/jpeg;base64," + blobInfo.base64();
+          console.log(blobInfo.blob());
           success(img);
-        },
+        }
       },
-      myValue: this.value,
+      myValue: this.value
     };
   },
   mounted() {
@@ -93,7 +107,7 @@ export default {
     // 可以添加一些自己的自定义事件，如清空内容
     clear() {
       this.myValue = "";
-    },
+    }
   },
   watch: {
     value(newValue) {
@@ -101,8 +115,8 @@ export default {
     },
     myValue(newValue) {
       this.$emit("input", newValue);
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
